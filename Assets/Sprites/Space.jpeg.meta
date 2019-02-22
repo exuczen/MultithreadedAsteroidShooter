@@ -1,0 +1,965 @@
+fileFormatVersion: 2
+guid: 718ba92c0c4296144af9263701d9b647
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: space_0
+    21300002: space_1
+    21300004: space_2
+    21300006: space_3
+    21300008: space_4
+    21300010: space_5
+    21300012: space_6
+    21300014: space_7
+    21300016: space_8
+    21300018: space_9
+    21300020: space_10
+    21300022: space_11
+    21300024: space_12
+    21300026: space_13
+    21300028: space_14
+    21300030: space_15
+    21300032: space_16
+    21300034: space_17
+    21300036: space_18
+    21300038: space_19
+    21300040: space_20
+    21300042: space_21
+    21300044: space_22
+    21300046: space_23
+    21300048: space_24
+    21300050: space_25
+    21300052: space_26
+    21300054: space_27
+    21300056: SpaceSprite_0
+    21300058: SpaceSprite_1
+    21300060: SpaceSprite_2
+    21300062: SpaceSprite_3
+    21300064: SpaceSprite_4
+    21300066: SpaceSprite_5
+    21300068: SpaceSprite_6
+    21300070: SpaceSprite_7
+    21300072: SpaceSprite_8
+    21300074: SpaceSprite_9
+    21300076: SpaceSprite_10
+    21300078: SpaceSprite_11
+    21300080: SpaceSprite_12
+    21300082: SpaceSprite_13
+    21300084: SpaceSprite_14
+    21300086: SpaceSprite_15
+    21300088: SpaceSprite_16
+    21300090: SpaceSprite_17
+    21300092: SpaceSprite_18
+    21300094: SpaceSprite_19
+    21300096: SpaceSprite_20
+    21300098: SpaceSprite_21
+    21300100: SpaceSprite_22
+    21300102: SpaceSprite_23
+    21300104: SpaceSprite_24
+    21300106: SpaceSprite_25
+    21300108: SpaceSprite_26
+    21300110: SpaceSprite_27
+    21300112: SpaceSprite_28
+    21300114: SpaceSprite_29
+    21300116: SpaceSprite_30
+    21300118: SpaceSprite_31
+    21300120: SpaceSprite_32
+    21300122: SpaceSprite_33
+    21300124: SpaceSprite_34
+    21300126: SpaceSprite_35
+    21300128: SpaceSprite_36
+    21300130: SpaceSprite_37
+    21300132: SpaceSprite_38
+    21300134: SpaceSprite_39
+    21300136: SpaceSprite_40
+    21300138: SpaceSprite_41
+    21300140: SpaceSprite_42
+    21300142: SpaceSprite_43
+    21300144: SpaceSprite_44
+    21300146: SpaceSprite_45
+    21300148: SpaceSprite_46
+    21300150: SpaceSprite_47
+    21300152: SpaceSprite_48
+    21300154: SpaceSprite_49
+    21300156: SpaceSprite_50
+    21300158: SpaceSprite_51
+    21300160: SpaceSprite_52
+    21300162: SpaceSprite_53
+    21300164: SpaceSprite_54
+    21300166: SpaceSprite_55
+    21300168: SpaceSprite_56
+    21300170: SpaceSprite_57
+    21300172: SpaceSprite_58
+    21300174: SpaceSprite_59
+    21300176: SpaceSprite_60
+    21300178: SpaceSprite_61
+    21300180: SpaceSprite_62
+    21300182: SpaceSprite_63
+    21300184: SpaceSprite_64
+    21300186: SpaceSprite_65
+    21300188: SpaceSprite_66
+    21300190: SpaceSprite_67
+    21300192: SpaceSprite_68
+    21300194: SpaceSprite_69
+    21300196: SpaceSprite_70
+    21300198: SpaceSprite_71
+    21300200: SpaceSprite_72
+    21300202: SpaceSprite_73
+    21300204: SpaceSprite_74
+    21300206: SpaceSprite_75
+    21300208: SpaceSprite_76
+    21300210: SpaceSprite_77
+    21300212: SpaceSprite_78
+    21300214: SpaceSprite_79
+    21300216: SpaceSprite_80
+    21300218: SpaceSprite_81
+    21300220: SpaceSprite_82
+    21300222: SpaceSprite_83
+    21300224: SpaceSprite_84
+    21300226: SpaceSprite_85
+    21300228: SpaceSprite_86
+    21300230: SpaceSprite_87
+    21300232: SpaceSprite_88
+    21300234: SpaceSprite_89
+    21300236: SpaceSprite_90
+    21300238: SpaceSprite_91
+    21300240: SpaceSprite_92
+    21300242: SpaceSprite_93
+    21300244: SpaceSprite_94
+    21300246: SpaceSprite_95
+    21300248: SpaceSprite_96
+    21300250: SpaceSprite_97
+    21300252: SpaceSprite_98
+    21300254: SpaceSprite_99
+    21300256: SpaceSprite_100
+    21300258: SpaceSprite_101
+    21300260: SpaceSprite_102
+    21300262: SpaceSprite_103
+    21300264: SpaceSprite_104
+    21300266: SpaceSprite_105
+    21300268: SpaceSprite_106
+    21300270: SpaceSprite_107
+    21300272: SpaceSprite_108
+    21300274: SpaceSprite_109
+    21300276: SpaceSprite_110
+    21300278: SpaceSprite_111
+    21300280: SpaceSprite_112
+    21300282: SpaceSprite_113
+    21300284: SpaceSprite_114
+    21300286: SpaceSprite_115
+    21300288: SpaceSprite_116
+    21300290: SpaceSprite_117
+    21300292: SpaceSprite_118
+    21300294: SpaceSprite_119
+    21300296: SpaceSprite_120
+    21300298: SpaceSprite_121
+    21300300: SpaceSprite_122
+    21300302: SpaceSprite_123
+    21300304: SpaceSprite_124
+    21300306: SpaceSprite_125
+    21300308: SpaceSprite_126
+    21300310: SpaceSprite_127
+    21300312: SpaceSprite_128
+    21300314: SpaceSprite_129
+    21300316: SpaceSprite_130
+    21300318: SpaceSprite_131
+    21300320: SpaceSprite_132
+    21300322: SpaceSprite_133
+    21300324: SpaceSprite_134
+    21300326: SpaceSprite_135
+    21300328: SpaceSprite_136
+    21300330: SpaceSprite_137
+    21300332: SpaceSprite_138
+    21300334: SpaceSprite_139
+    21300336: SpaceSprite_140
+    21300338: SpaceSprite_141
+    21300340: SpaceSprite_142
+    21300342: SpaceSprite_143
+    21300344: Space_0
+    21300346: Space_1
+    21300348: Space_2
+    21300350: Space_3
+    21300352: Space_4
+    21300354: Space_5
+    21300356: Space_6
+    21300358: Space_7
+    21300360: Space_8
+    21300362: Space_9
+    21300364: Space_10
+    21300366: Space_11
+    21300368: Space_12
+    21300370: Space_13
+    21300372: Space_14
+    21300374: Space_15
+    21300376: Space_16
+    21300378: Space_17
+    21300380: Space_18
+    21300382: Space_19
+    21300384: Space_20
+    21300386: Space_21
+    21300388: Space_22
+    21300390: Space_23
+    21300392: Space_24
+    21300394: Space_25
+    21300396: Space_26
+    21300398: Space_27
+    21300400: Space_28
+    21300402: Space_29
+    21300404: Space_30
+    21300406: Space_31
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Space_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f198cae94eb20b4439e66ecbe88c475d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_1
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 1551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0da020c1a3963484cb0602370a7afa05
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_2
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 1551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2ade1e9f461e68469fcc77d61a4ca1a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_3
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 1551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94389cc4074d6604f928d20c4038f126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_4
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 1551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ea09ba72c903684e969b0f224ca69ac
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_5
+      rect:
+        serializedVersion: 2
+        x: 2500
+        y: 1551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e87533ce63cac7c45aabe53a7412cdec
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_6
+      rect:
+        serializedVersion: 2
+        x: 3000
+        y: 1551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64f9fefda40ddbe46b0d945480eb1616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_7
+      rect:
+        serializedVersion: 2
+        x: 3500
+        y: 1551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 274a6da083995b547a1b2e134480399e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1051
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d66c2da75d597924eb62dc02b1bf05df
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_9
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 1051
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f81e258992bca64da3233ff27e63346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_10
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 1051
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a9c0238a7f7d844b9736b48e56d293b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_11
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 1051
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb157e3c1c3f2764eb99407f155a2baa
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_12
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 1051
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10ec14dcaf3184345bfe66af7cc23bf2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_13
+      rect:
+        serializedVersion: 2
+        x: 2500
+        y: 1051
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0380d73b7cd4b334aa95ec33553838b5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_14
+      rect:
+        serializedVersion: 2
+        x: 3000
+        y: 1051
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f167529a6cfab44094e4848c4143583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_15
+      rect:
+        serializedVersion: 2
+        x: 3500
+        y: 1051
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03cd97999c21a6046a3fdc16c7fa9852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a29d90da9ebc72944be06b9df366f0fd
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_17
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e33e12bf997e4064eb11ebf9abbed07a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_18
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: daffc229b662c2147a9af92d8e0946b8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_19
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06803a10090ac1547bcb763d75d47052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_20
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67d6dc2ca6f67a944b60cc2dccfd0fc7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_21
+      rect:
+        serializedVersion: 2
+        x: 2500
+        y: 551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34dda0ada7d31394290d9874ea20607e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_22
+      rect:
+        serializedVersion: 2
+        x: 3000
+        y: 551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05b35003475bf4c4c9ee85509ce36ad5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_23
+      rect:
+        serializedVersion: 2
+        x: 3500
+        y: 551
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ae00465bcc413c46b0a504781f9c3bc
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 51
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab42044963f4b2d40b0019fe47aa13ad
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_25
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 51
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89c8f8922a00bc846ae30251fd7729e6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_26
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 51
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 319c69f9a280fac498d8ccc67d974295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_27
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 51
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d589418e917683488164f41c21d29fa
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_28
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 51
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecf311ab42b5ac2488b226826d3b6816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_29
+      rect:
+        serializedVersion: 2
+        x: 2500
+        y: 51
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7fb55d73b1e1b448b188915664d9642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_30
+      rect:
+        serializedVersion: 2
+        x: 3000
+        y: 51
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f72fa77f92a07f419a4a7e0ad8d3bd4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space_31
+      rect:
+        serializedVersion: 2
+        x: 3500
+        y: 51
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49424e73d37361142a8d5dba9c5fe03a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: f3850dfd435bd234ab4c58002b79afe3
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

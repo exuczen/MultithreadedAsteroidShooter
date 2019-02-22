@@ -1,0 +1,12 @@
+/Builds/
+/Library/
+/LibraryWrappers/
+/Temp/
+/obj/Debug/
+*.sln
+*.csproj
+*.userprefs
+*.apk
+.vs/
+.gradle/
+git_checkout*
