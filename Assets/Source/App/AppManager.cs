@@ -95,7 +95,8 @@ public class AppManager : Singleton<AppManager>
     {
         stopRequested = true;
         threadGrid.RequestStop();
-        yield return new WaitWhile(() => running);
+        if (running && Const.Multithreading)
+            yield return new WaitWhile(() => running);
         yield return new WaitForSeconds(0.5f);
         mainPanel.FailText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1.5f);

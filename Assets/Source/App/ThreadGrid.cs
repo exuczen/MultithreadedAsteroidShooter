@@ -132,7 +132,7 @@ public class ThreadGrid : CustomGrid
 
     public void StartThreads()
     {
-        if (Const.Multithreading)
+        if (threadCells != null)
         {
             for (int j = 0; j < threadCells.Length; j++)
             {
@@ -143,9 +143,12 @@ public class ThreadGrid : CustomGrid
 
     public void RequestStop()
     {
-        for (int j = 0; j < threadCells.Length; j++)
+        if (threadCells != null)
         {
-            threadCells[j].RequestStop();
+            for (int j = 0; j < threadCells.Length; j++)
+            {
+                threadCells[j].RequestStop();
+            }
         }
     }
 

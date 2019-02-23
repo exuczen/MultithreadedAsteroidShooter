@@ -43,12 +43,12 @@ public class CollisionCell : CustomCell
             cell.GetComponent<SpriteRenderer>().color = Color.black;
             //cell.GetComponent<SpriteRenderer>().enabled = true;
         }
-        parentCell.IsMiddle = (pX == 0 && pY == 0) || (pX == 1 && pY == 0) || (pX == 0 && pY == 1) || (pX == 1 && pY == 1);
-        if (parentCell.IsMiddle)
-        {
-            cell.GetComponent<SpriteRenderer>().color = Color.black;
-            //cell.GetComponent<SpriteRenderer>().enabled = true;
-        }
+        //parentCell.IsMiddle = (pX == 0 && pY == 0) || (pX == 1 && pY == 0) || (pX == 0 && pY == 1) || (pX == 1 && pY == 1);
+        //if (parentCell.IsMiddle)
+        //{
+        //    parentCell.GetComponent<SpriteRenderer>().color = Color.black;
+        //    //parentCell.GetComponent<SpriteRenderer>().enabled = true;
+        //}
         return cell;
     }
 
