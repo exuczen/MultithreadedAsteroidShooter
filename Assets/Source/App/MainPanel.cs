@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DC;
+using UnityEngine.Events;
 
-public class MainPanel : Singleton<MainPanel>
+public class MainPanel : UISingleton<MainPanel>
 {
     [SerializeField]
     private Text scoreText;
@@ -17,7 +18,9 @@ public class MainPanel : Singleton<MainPanel>
     public Text FailText { get => failText; set => failText = value; }
     public Button RestartButton { get => restartButton; set => restartButton = value; }
 
-    protected override void OnAwake()
+    public UnityAction onRectTransformDimensionsChange;
+
+    protected override void Awake()
     {
         ResetScoreText();
         failText.gameObject.SetActive(false);
@@ -29,9 +32,14 @@ public class MainPanel : Singleton<MainPanel>
         });
     }
 
-
     public void ResetScoreText()
     {
         ScoreVaule = "0";
+    }
+
+    protected override void OnRectTransformDimensionsChange()
+    {
+        //Debug.LogWarning(GetType() + ".OnRectTransformDimensionsChange");
+        onRectTransformDimensionsChange?.Invoke();
     }
 }

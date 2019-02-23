@@ -28,9 +28,11 @@ public class AppManager : Singleton<AppManager>
 
     private Player player;
 
-    public ThreadGrid ThreadGrid { get => threadGrid; set => threadGrid = value; }
+    public ThreadGrid ThreadGrid { get => threadGrid; }
 
-    public AsteroidCreator AsteroidCreator { get => asteroidCreator; set => asteroidCreator = value; }
+    public AsteroidCreator AsteroidCreator { get => asteroidCreator; }
+
+    public MainPanel MainPanel { get => mainPanel; }
 
     protected override void OnAwake()
     {
@@ -40,6 +42,8 @@ public class AppManager : Singleton<AppManager>
         player = spaceship.GetComponent<Player>();
 
         debugPanel.gameObject.SetActive(true);
+
+        mainPanel.onRectTransformDimensionsChange = asteroidCreator.RefreshCameraSize;
     }
 
     private void Update()

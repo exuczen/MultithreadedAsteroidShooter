@@ -53,6 +53,10 @@ public class AsteroidCreator : MonoBehaviour
 
     public Transform AsteroidContainer { get => asteroidContainer; }
 
+    public int TotalAsteroidsCount => asteroidContainer.childCount;
+
+    private Vector2 cameraHalfSize;
+
     private void Awake()
     {
         threadGrid = AppManager.Instance.ThreadGrid;
@@ -61,6 +65,11 @@ public class AsteroidCreator : MonoBehaviour
         collCellSize = cellSize * spawnInCollCellCount;
         spawnGrid.cellSize = new Vector2(cellSize, cellSize);
         spawnGridSize = new Vector2(cellSize * spawnGridHalfXYCount * 2, cellSize * spawnGridHalfXYCount * 2);
+    }
+
+    private void Start()
+    {
+        RefreshCameraSize();
     }
 
     public void CreateAsteroids()
@@ -128,13 +137,14 @@ public class AsteroidCreator : MonoBehaviour
         explosion.Play();
     }
 
-    public int GetActiveAsteroidsCount()
+    public void RefreshCameraSize()
     {
-        return asteroidContainer.GetActiveChildCount();
+        Camera camera = Camera.main;
+        if (camera)
+        {
+            cameraHalfSize = new Vector2(camera.orthographicSize * Screen.width / Screen.height, camera.orthographicSize);
+        }
     }
-
-    public int TotalAsteroidsCount => asteroidContainer.childCount;
-
 
     public void Clear()
     {
