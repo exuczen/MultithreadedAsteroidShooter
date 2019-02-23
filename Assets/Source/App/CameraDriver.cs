@@ -1,7 +1,4 @@
-﻿using DC;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public class CameraDriver : MonoBehaviour

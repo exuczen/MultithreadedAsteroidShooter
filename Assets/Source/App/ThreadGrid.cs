@@ -1,10 +1,5 @@
-﻿using DC;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class ThreadGrid : CustomGrid
 {

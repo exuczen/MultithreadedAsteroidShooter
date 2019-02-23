@@ -1,6 +1,3 @@
-﻿using UnityEngine;
-using System.Collections;
-
 public class ConditionalHideRangeAttribute : ConditionalHideAttribute
 {
 	public float min;

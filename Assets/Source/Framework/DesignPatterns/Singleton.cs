@@ -1,9 +1,8 @@
 using UnityEngine;
-using System.Collections;
 
 namespace DC
 {
-	public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	{
 		protected static T instance;
 
