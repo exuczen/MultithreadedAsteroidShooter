@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class SpaceTilemap : MonoBehaviour
 {
     [SerializeField]
-    private Camera camera;
+    private new Camera camera;
 
     [SerializeField]
     private Tile[] tiles;

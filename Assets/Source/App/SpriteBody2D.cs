@@ -15,7 +15,7 @@ public abstract class SpriteBody2D : MonoBehaviour
     private float angularVelocity;
     private SpriteRenderer spriteRenderer;
     protected Rigidbody2D rigidBody;
-    protected Collider2D collider;
+    protected new Collider2D collider;
     protected Bounds bounds;
     private Vector2Int sizeInt;
     private Vector2Int halfSizeInt;
@@ -62,7 +62,6 @@ public abstract class SpriteBody2D : MonoBehaviour
         get => positionInt;
     }
     
-
     public void ResetData()
     {
         spriteColor = spriteRenderer.color = Color.black;

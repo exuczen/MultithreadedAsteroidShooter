@@ -20,7 +20,7 @@ public class DebugPanel : UIPanel
         debugText.text = text;
     }
 
-    private void Start()
+    protected override void Start()
     {
         fpsCounter = 0;
         fpsAvgStartTime = Time.realtimeSinceStartup;

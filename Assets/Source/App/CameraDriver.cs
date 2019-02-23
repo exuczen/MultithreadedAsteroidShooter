@@ -3,13 +3,11 @@
 [RequireComponent(typeof(Camera))]
 public class CameraDriver : MonoBehaviour
 {
-    private Camera camera;
+    private new Camera camera;
 
     private const float smoothFactor = 4f;
 
     private float cameraInitialOrthoSize;
-
-    public Camera Camera { get => camera; }
 
     private void Start()
     {

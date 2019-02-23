@@ -17,7 +17,7 @@ public class MainPanel : Singleton<MainPanel>
     public Text FailText { get => failText; set => failText = value; }
     public Button RestartButton { get => restartButton; set => restartButton = value; }
 
-    private void Awake()
+    protected override void OnAwake()
     {
         ResetScoreText();
         failText.gameObject.SetActive(false);
