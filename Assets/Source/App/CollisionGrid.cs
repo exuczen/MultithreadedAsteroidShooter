@@ -60,22 +60,21 @@ public class CollisionGrid : CustomGrid
 
     public void UpdateBounds(Bounds parentBounds)
     {
-        BottomLeft = parentBounds.min;
+        bounds = parentBounds;
     }
 
     public void UpdateGridInBounds(Bounds parentBounds, List<SpriteBody2D> bodiesOutOfBounds)
     {
-        BottomLeft = parentBounds.min;
+        bounds = parentBounds;
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].UpdateBodiesOutOfCellBounds(bodiesOutOfBounds);
         }
     }
 
-
     public void UpdateCollisions(Bounds parentBounds)
     {
-        BottomLeft = parentBounds.min;
+        bounds = parentBounds;
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].UpdateCollisions();

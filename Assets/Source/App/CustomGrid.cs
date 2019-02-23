@@ -3,27 +3,27 @@
 [RequireComponent(typeof(SpriteRenderer))]
 public class CustomGrid : MonoBehaviour
 {
-    protected Vector2 size;
+    protected Bounds bounds;
     protected Vector2 cellSize;
     protected Vector2Int xyCount;
-    protected Vector2 bottomLeft;
 
     public Vector2 BottomLeft
     {
-        get => bottomLeft;
+        get => bounds.min;
         set {
-            bottomLeft = value;
+            bounds.min = value;
         }
     }
-    public Vector2Int XYCount { get => xyCount; }
-    public Vector2 Size
-    {
-        get => size;
-        set {
-            size = value;
-        }
-    }
-    public Vector2 CellSize { get => cellSize; }
+
+    public Vector2Int XYCount => xyCount;
+
+    public Vector2 Size => bounds.size;
+
+    public Vector2 Center => bounds.center;
+
+    public Vector2 CellSize => cellSize;
+
+    public Bounds Bounds => bounds;
 
     public T CreateInstance<T>(Transform parent, Bounds bounds, Vector2Int xyCount) where T : CustomGrid
     {
@@ -36,9 +36,8 @@ public class CustomGrid : MonoBehaviour
     {
         //Debug.Log(GetType() + ".SetParams " + bounds + " " + xyCount);
         this.xyCount = xyCount;
-        size = bounds.size;
-        cellSize = new Vector2(size.x / xyCount.x, size.y / xyCount.y);
-        BottomLeft = bounds.min;
+        this.bounds = bounds;
+        cellSize = new Vector2(Size.x / xyCount.x, Size.y / xyCount.y);
         Bounds spriteBounds = GetComponent<SpriteRenderer>().sprite.bounds;
         Vector3 parentLossyScale = transform.parent ? transform.parent.lossyScale : Vector3.one;
         transform.localScale = bounds.size / (parentLossyScale * (Vector2)spriteBounds.size);
@@ -49,11 +48,10 @@ public class CustomGrid : MonoBehaviour
         SetParams(new Bounds(Vector2.zero, size), xyCount);
     }
 
-
     public int GetCellIndex(Vector2 position)
     {
-        float rayX = position.x - bottomLeft.x;
-        float rayY = position.y - bottomLeft.y;
+        float rayX = position.x - bounds.min.x;
+        float rayY = position.y - bounds.min.y;
         int cellX = (int)(rayX / cellSize.x);
         int cellY = (int)(rayY / cellSize.y);
         if (cellX >= 0 && cellX < xyCount.x && cellY >= 0 && cellY < xyCount.y)

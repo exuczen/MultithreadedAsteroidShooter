@@ -13,23 +13,21 @@ public class Asteroid : SpriteBody2D
         return asteroid;
     }
 
-    public void SetRandomPositionInBounds(Vector2 bottomLeft, Vector2 size)
+    public void SetRandomPositionInBounds(Bounds rectBounds, Vector2 camHalfSize)
     {
         int randomSignX = (Random.Range(0, 2) << 1) - 1;
         int randomSignY = (Random.Range(0, 2) << 1) - 1;
-        Camera camera = Camera.main;
-        Vector2 middlePos = bottomLeft + (size / 2f);
-        Vector2 camHalfSize = new Vector2(camera.orthographicSize * Screen.width / Screen.height, camera.orthographicSize);
+        Vector2 middlePos = rectBounds.center;
         float posX, posY;
         if (Random.Range(0, 2) == 0)
         {
-            posX = middlePos.x + randomSignX * Random.Range(camHalfSize.x + bounds.extents.x, size.x / 2f - bounds.size.x);
-            posY = middlePos.y + randomSignY * Random.Range(0f, size.y / 2f - bounds.size.y);
+            posX = middlePos.x + randomSignX * Random.Range(camHalfSize.x + bounds.extents.x, rectBounds.extents.x - bounds.size.x);
+            posY = middlePos.y + randomSignY * Random.Range(0f, rectBounds.extents.y - bounds.size.y);
         }
         else
         {
-            posY = middlePos.y + randomSignY * Random.Range(camHalfSize.y + bounds.extents.y, size.y / 2f - bounds.size.y);
-            posX = middlePos.x + randomSignX * Random.Range(0f, size.x / 2f - bounds.size.x);
+            posY = middlePos.y + randomSignY * Random.Range(camHalfSize.y + bounds.extents.y, rectBounds.extents.y - bounds.size.y);
+            posX = middlePos.x + randomSignX * Random.Range(0f, rectBounds.extents.x - bounds.size.x);
         }
         //float posX = middlePos.x + randomSignX * Random.Range(0f, camHalfSize.x);
         //float posY = middlePos.y + randomSignY * Random.Range(0f, camHalfSize.y);

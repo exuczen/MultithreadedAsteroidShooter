@@ -126,7 +126,7 @@ public class AsteroidCreator : MonoBehaviour
     public void RespawnAsteroid(Asteroid asteroid)
     {
         asteroid.SetRandomVelocities(linearVelocityMin, linearVelocityMax, angularVelocityMin, angularVelocityMax);
-        asteroid.SetRandomPositionInBounds(threadGrid.BottomLeft, threadGrid.Size);
+        asteroid.SetRandomPositionInBounds(threadGrid.Bounds, cameraHalfSize);
         asteroid.gameObject.SetActive(true);
     }
 

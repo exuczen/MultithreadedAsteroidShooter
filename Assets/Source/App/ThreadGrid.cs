@@ -41,7 +41,7 @@ public class ThreadGrid : CustomGrid
         {
             xCount = yCount = 1;
         }
-        size = asteroidCreator.SpawnGridSize;
+        Vector2 size = asteroidCreator.SpawnGridSize;
         if ((size.x > size.y && xCount < yCount) || (size.x < size.y && xCount > yCount))
         {
             int tmp = xCount;
@@ -105,8 +105,7 @@ public class ThreadGrid : CustomGrid
     public void UpdateBounds()
     {
         Vector2 camPos = Camera.main.transform.position;
-        transform.position = camPos;
-        BottomLeft = camPos - size / 2f;
+        bounds.center = transform.position = camPos;
     }
 
     public void SyncThreads()

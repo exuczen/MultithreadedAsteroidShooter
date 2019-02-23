@@ -10,6 +10,7 @@
     public const int LayerMissile = 8;
     public const int LayerDefault = 0;
     public const bool DebugSprites = false;
+    //public const bool DebugSprites = true;
     public const int PlayerPointsForAsteroid = 10;
 }
 
