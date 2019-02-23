@@ -39,9 +39,9 @@ public class AsteroidCreator : MonoBehaviour
 
     private const float angularVelocityMin = 15f;
 
-    private const float linearVelocityMax = 4f;
+    private const float linearVelocityMax = 6f;
 
-    private const float linearVelocityMin = 1f;
+    private const float linearVelocityMin = 2f;
 
     private int collCellSize;
 
@@ -88,7 +88,7 @@ public class AsteroidCreator : MonoBehaviour
                 cellPosition.Set(x, y, 0);
                 Vector3 asteroidPos = spawnGrid.GetCellCenterWorld(cellPosition);
                 Asteroid asteroid = asteroidPrefab.CreateInstance(this, asteroidContainer, asteroidPos);
-                asteroid.SetRandomVelocities(linearVelocityMax, linearVelocityMax, angularVelocityMin, angularVelocityMax);
+                asteroid.SetRandomVelocities(linearVelocityMin, linearVelocityMax, angularVelocityMin, angularVelocityMax);
             }
         }
         prefabRigidBody.simulated = false;
@@ -118,7 +118,7 @@ public class AsteroidCreator : MonoBehaviour
 
     public void RespawnAsteroid(Asteroid asteroid)
     {
-        asteroid.SetRandomVelocities(linearVelocityMax, linearVelocityMax, angularVelocityMin, angularVelocityMax);
+        asteroid.SetRandomVelocities(linearVelocityMin, linearVelocityMax, angularVelocityMin, angularVelocityMax);
         asteroid.SetRandomPositionInBounds(threadGrid.BottomLeft, threadGrid.Size);
         asteroid.gameObject.SetActive(true);
     }
