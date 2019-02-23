@@ -54,26 +54,11 @@ public class Spaceship : MonoBehaviour
         float inputY = Input.GetAxis("Vertical");
         float inputX = Input.GetAxis("Horizontal");
         //Debug.LogWarning(GetType() + ".Update: " + inputX + " " + inputY);
-        if (Mathf.Abs(inputX) > 0f)
-        {
-            rigidBody2D.angularVelocity = -inputX * angularVelocityFactor * angularVelocity;
-            //transform.Rotate(0, 0, -inputX * angularVelocityScaler * angularVelocity * Time.fixedDeltaTime);
-        }
-        else
-        {
-            rigidBody2D.angularVelocity = 0;
-        }
-        if (inputY > 0f)
-        {
-            rigidBody2D.velocity = transform.up * inputY * linearVelocityFactor * linearVelocity;
-            //transform.Translate(0, inputY * linearVelocityScaler * linearVelocity * Time.fixedDeltaTime, 0, Space.Self);
-            jetAnimator.gameObject.SetActive(true);
-        }
-        else
-        {
-            rigidBody2D.velocity = Vector2.zero;
-            jetAnimator.gameObject.SetActive(false);
-        }
+        rigidBody2D.angularVelocity = -inputX * angularVelocityFactor * angularVelocity;
+        rigidBody2D.velocity = inputY * transform.up * linearVelocityFactor * linearVelocity;
+        //transform.Rotate(0, 0, -inputX * angularVelocityScaler * angularVelocity * Time.fixedDeltaTime);
+        //transform.Translate(0, inputY * linearVelocityScaler * linearVelocity * Time.fixedDeltaTime, 0, Space.Self);
+        jetAnimator.gameObject.SetActive(inputY > 0f);
         cameraDriver.FollowTarget(transform);
     }
 
@@ -97,7 +82,6 @@ public class Spaceship : MonoBehaviour
             missile.transform.SetParent(missileContainer, true);
             missile.GetComponent<Rigidbody2D>().velocity = velocity;
             missile.transform.up = velocity;
-            //Time.timeScale = 0.1f;
         }
     }
 
@@ -116,6 +100,20 @@ public class Spaceship : MonoBehaviour
         explosion.gameObject.SetActive(true);
         explosion.transform.position = pos;
         explosion.Play();
+    }
+
+    private IEnumerator MakeIndestructibleRoutine(float duration)
+    {
+        bool indestructiblePrev = indestructible;
+        indestructible = true;
+        yield return new WaitForSeconds(duration);
+        indestructible = indestructiblePrev;
+    }
+
+    private void OnEnable()
+    {
+        if (!indestructible)
+            StartCoroutine(MakeIndestructibleRoutine(2f));
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
