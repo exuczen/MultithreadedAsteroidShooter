@@ -14,6 +14,7 @@ public class AsteroidExplosion : MonoBehaviour
         //mainModule.stopAction = ParticleSystemStopAction.Destroy;
         //particles.main = mainModule;
     }
+
     public void Play()
     {
         particles.Play();

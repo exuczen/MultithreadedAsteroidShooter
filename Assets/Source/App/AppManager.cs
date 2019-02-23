@@ -25,11 +25,12 @@ public class AppManager : Singleton<AppManager>
 
     private bool running;
 
-    private bool restartLevelRequested;
+    private bool stopRequested;
 
     private Player player;
 
     public ThreadGrid ThreadGrid { get => threadGrid; set => threadGrid = value; }
+
     public AsteroidCreator AsteroidCreator { get => asteroidCreator; set => asteroidCreator = value; }
 
     protected override void OnAwake()
@@ -55,7 +56,7 @@ public class AppManager : Singleton<AppManager>
             threadGrid.SyncThreads();
             threadGrid.SyncStopRequest();
 
-            if (!restartLevelRequested)
+            if (!stopRequested)
                 threadGrid.ResumeThreads();
             else
                 running = false;
@@ -66,13 +67,12 @@ public class AppManager : Singleton<AppManager>
         }
     }
 
-
     private void Start()
     {
         asteroidCreator.CreateAsteroids();
         threadGrid.AddAsteroidsToThreadCells(asteroidCreator);
         threadGrid.StartThreads();
-        restartLevelRequested = false;
+        stopRequested = false;
         running = true;
         debugPanel.SetDebugText(
             "total asteroids: " + asteroidCreator.TotalAsteroidsCount
@@ -86,21 +86,34 @@ public class AppManager : Singleton<AppManager>
         mainPanel.ScoreVaule = player.Score.ToString();
     }
 
+    public void StartFailRoutine()
+    {
+        StartCoroutine(FailRoutine());
+    }
+
+    private IEnumerator FailRoutine()
+    {
+        stopRequested = true;
+        threadGrid.RequestStop();
+        yield return new WaitWhile(() => running);
+        yield return new WaitForSeconds(0.5f);
+        mainPanel.FailText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        mainPanel.FailText.gameObject.SetActive(false);
+        mainPanel.RestartButton.gameObject.SetActive(true);
+    }
+
     public void RestartLevel()
     {
         StartCoroutine(RestartLevelRoutine());
     }
 
-    public IEnumerator RestartLevelRoutine()
+    private IEnumerator RestartLevelRoutine()
     {
-        yield return new WaitForSeconds(1f);
-        restartLevelRequested = true;
-        threadGrid.RequestStop();
-        yield return new WaitWhile(() => running);
+        yield return new WaitForEndOfFrame();
         threadGrid.Clear();
         asteroidCreator.Clear();
         yield return new WaitForEndOfFrame();
-        mainPanel.ResetScoreText();
         player.ResetScore();
         spaceship.Respawn();
         cameraDriver.ResetCameraPosition();

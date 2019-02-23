@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        score = 0;
+        ResetScore();
     }
 
     public void AddPoints(int points)
@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     public void ResetScore()
     {
         score = 0;
+        MainPanel.Instance.ResetScoreText();
     }
 
 }
