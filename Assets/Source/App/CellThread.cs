@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CellThread : SyncedThread
 {
-    private List<SpriteBody2D> bodies = new List<SpriteBody2D>();
+    private List<RawBody2D> bodies = new List<RawBody2D>();
 
-    private List<SpriteBody2D> bodiesOutOfBounds = new List<SpriteBody2D>();
+    private List<RawBody2D> bodiesOutOfBounds = new List<RawBody2D>();
 
-    private List<SpriteBody2D> bodiesToRespawn = new List<SpriteBody2D>();
+    private List<RawBody2D> bodiesToRespawn = new List<RawBody2D>();
 
     private ThreadGrid grid;
 
@@ -51,7 +51,7 @@ public class CellThread : SyncedThread
         int bodyIndex = 0;
         while (bodyIndex < bodiesToRespawn.Count && bodiesToRespawn[bodyIndex].RespawnTime <= currTime)
         {
-            SpriteBody2D body = bodiesToRespawn[bodyIndex];
+            RawBody2D body = bodiesToRespawn[bodyIndex];
             body.Respawn();
             grid.AddBodyToThreadCell(body);
             bodyIndex++;
@@ -72,7 +72,7 @@ public class CellThread : SyncedThread
 
         for (int i = 0; i < bodiesOutOfBounds.Count; i++)
         {
-            SpriteBody2D body = bodiesOutOfBounds[i];
+            RawBody2D body = bodiesOutOfBounds[i];
             grid.AddBodyToThreadCell(body, body.threadCellIndex);
         }
         bodiesOutOfBounds.Clear();
@@ -92,7 +92,7 @@ public class CellThread : SyncedThread
         CopyGridParams();
     }
 
-    private int UpdateBodyOutOfBounds(SpriteBody2D body, int bodyIndex)
+    private int UpdateBodyOutOfBounds(RawBody2D body, int bodyIndex)
     {
         Vector2 position = body.Position;
         if (!cellBounds.Contains(position))
@@ -132,7 +132,7 @@ public class CellThread : SyncedThread
             return;
         for (int i = 0; i < bodies.Count; i++)
         {
-            SpriteBody2D body = bodies[i];
+            RawBody2D body = bodies[i];
             body.UpdateMotionData(deltaTime);
             i = UpdateBodyOutOfBounds(body, i);
         }
@@ -141,7 +141,7 @@ public class CellThread : SyncedThread
         RemoveCollidedBodies();
     }
 
-    public void AddBody(SpriteBody2D body, bool addToCollGrid = true)
+    public void AddBody(RawBody2D body, bool addToCollGrid = true)
     {
         body.threadCellIndex = cell.Index;
         bodies.Add(body);
@@ -149,7 +149,7 @@ public class CellThread : SyncedThread
             collGrid.AddBodyToCell(body);
     }
 
-    private void AddRemovedBodyToRespawn(SpriteBody2D body, float respawnTime)
+    private void AddRemovedBodyToRespawn(RawBody2D body, float respawnTime)
     {
         if (!bodiesToRespawn.Contains(body))
         {
@@ -158,13 +158,13 @@ public class CellThread : SyncedThread
         }
     }
 
-    private void RemoveBody(SpriteBody2D body)
+    private void RemoveBody(RawBody2D body)
     {
         bodies.Remove(body);
         collGrid.RemoveBodyFromCell(body);
     }
 
-    public void AddBodyToRespawn(SpriteBody2D body)
+    public void AddBodyToRespawn(RawBody2D body)
     {
         RemoveBody(body);
         AddRemovedBodyToRespawn(body, body.RespawnTime);

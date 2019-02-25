@@ -10,7 +10,7 @@ public class CollisionCell : CustomCell
 
     private static int colorIndex = 0;
 
-    private List<SpriteBody2D> bodies = new List<SpriteBody2D>();
+    private List<RawBody2D> bodies = new List<RawBody2D>();
 
     private CollisionGrid collGrid;
 
@@ -51,14 +51,14 @@ public class CollisionCell : CustomCell
         return cell;
     }
 
-    public void RemoveBody(SpriteBody2D body)
+    public void RemoveBody(RawBody2D body)
     {
         body.SetSpriteColor(Color.black);
         bodies.Remove(body);
         body.collCellIndex = -1;
     }
 
-    public void AddBody(SpriteBody2D body)
+    public void AddBody(RawBody2D body)
     {
         //Debug.LogWarning(GetType() + ".AddBody: cellIndex=" + index + " color=" + color);
         body.SetSpriteColor(Const.DebugSprites ? color : Color.white);
@@ -67,14 +67,14 @@ public class CollisionCell : CustomCell
         bodies.Add(body);
     }
 
-    public void UpdateBodiesOutOfCellBounds(List<SpriteBody2D> bodiesOutOfBounds)
+    public void UpdateBodiesOutOfCellBounds(List<RawBody2D> bodiesOutOfBounds)
     {
         UpdateBounds();
         //return;
         //Bounds2Int scaledBounds = bounds.GetScaledBounds(Const.FloatToIntFactorLog2);
         for (int i = 0; i < bodies.Count; i++)
         {
-            SpriteBody2D body = bodies[i];
+            RawBody2D body = bodies[i];
             if (!bounds.Contains(body.Position))
             {
                 RemoveBody(body);
@@ -87,10 +87,10 @@ public class CollisionCell : CustomCell
     {
         for (int i = 0; i < bodies.Count; i++)
         {
-            SpriteBody2D bodyA = bodies[i];
+            RawBody2D bodyA = bodies[i];
             for (int j = i + 1; j < bodies.Count; j++)
             {
-                SpriteBody2D bodyB = bodies[j];
+                RawBody2D bodyB = bodies[j];
                 if (bodyA.BoundsOverlap(bodyB, out int dx, out int dy) &&
                     bodyA.RadiusOverlap(bodyB, dx, dy))
                 {

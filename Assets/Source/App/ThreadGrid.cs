@@ -80,7 +80,7 @@ public class ThreadGrid : CustomGrid
             for (int i = 0; i < asteroids.childCount; i++)
             {
                 Transform asteroidTransform = asteroids.GetChild(i);
-                SpriteBody2D body = asteroidTransform.GetComponent<SpriteBody2D>();
+                RawBody2D body = asteroidTransform.GetComponent<RawBody2D>();
                 body.Position = asteroidTransform.position;
                 int cellIndex = GetCellIndex(body.Position);
                 threadCells[cellIndex].AddBody(body);
@@ -154,19 +154,19 @@ public class ThreadGrid : CustomGrid
         }
     }
 
-    public void AddBodyToRespawnInThreadCell(SpriteBody2D body)
+    public void AddBodyToRespawnInThreadCell(RawBody2D body)
     {
         int cellIndex = GetCellIndex(body.Position);
         threadCells[cellIndex].AddBodyToRespawn(body);
     }
 
-    public void AddBodyToThreadCell(SpriteBody2D body)
+    public void AddBodyToThreadCell(RawBody2D body)
     {
         int cellIndex = GetCellIndex(body.Position);
         threadCells[cellIndex].AddBody(body);
     }
 
-    public void AddBodyToThreadCell(SpriteBody2D body, int cellIndex)
+    public void AddBodyToThreadCell(RawBody2D body, int cellIndex)
     {
         threadCells[cellIndex].AddBody(body);
     }

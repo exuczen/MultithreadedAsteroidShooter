@@ -45,12 +45,12 @@ public class ThreadCell : CustomCell
         thread.SyncStopRequest();
     }
 
-    public void AddBodyToRespawn(SpriteBody2D body)
+    public void AddBodyToRespawn(RawBody2D body)
     {
         thread.AddBodyToRespawn(body);
     }
 
-    public void AddBody(SpriteBody2D body)
+    public void AddBody(RawBody2D body)
     {
         thread.AddBody(body);
     }

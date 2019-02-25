@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class SpriteBody2D : MonoBehaviour
+public abstract class RawBody2D : MonoBehaviour
 {
     [HideInInspector]
     public int threadCellIndex;
@@ -30,7 +30,7 @@ public abstract class SpriteBody2D : MonoBehaviour
     public Rigidbody2D RigidBody { get => rigidBody; }
     public int Layer { get => layer; set { layer = value; } }
 
-    public T CreateInstance<T>(Transform parent, Vector3 position, float r) where T : SpriteBody2D
+    public T CreateInstance<T>(Transform parent, Vector3 position, float r) where T : RawBody2D
     {
         T body = Instantiate(this as T, position, Quaternion.identity, parent);
         body.Initialize(r);
@@ -94,13 +94,13 @@ public abstract class SpriteBody2D : MonoBehaviour
         radiusInt = (int)(radiusNormalized * Mathf.Max(bounds.extents.x, bounds.extents.y) * Const.FloatToIntFactor);
     }
 
-    public bool RadiusOverlap(SpriteBody2D body, int dxInt, int dyInt)
+    public bool RadiusOverlap(RawBody2D body, int dxInt, int dyInt)
     {
         int radiusIntSum = radiusInt + body.radiusInt;
         return dxInt * dxInt + dyInt * dyInt <= radiusIntSum * radiusIntSum;
     }
 
-    public bool BoundsOverlap(SpriteBody2D body, out int dxInt, out int dyInt)
+    public bool BoundsOverlap(RawBody2D body, out int dxInt, out int dyInt)
     {
         //dxInt = 0;
         //dyInt = 0;

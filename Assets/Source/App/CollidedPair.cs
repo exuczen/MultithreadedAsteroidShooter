@@ -3,10 +3,10 @@ using DC;
 
 public struct CollidedPair
 {
-    public SpriteBody2D bodyA;
-    public SpriteBody2D bodyB;
+    public RawBody2D bodyA;
+    public RawBody2D bodyB;
 
-    public CollidedPair(SpriteBody2D bodyA, SpriteBody2D bodyB)
+    public CollidedPair(RawBody2D bodyA, RawBody2D bodyB)
     {
         this.bodyA = bodyA;
         this.bodyB = bodyB;

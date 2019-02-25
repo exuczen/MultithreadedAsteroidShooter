@@ -2,7 +2,7 @@
 using DC;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Asteroid : SpriteBody2D
+public class Asteroid : RawBody2D
 {
     private AsteroidCreator creator;
 

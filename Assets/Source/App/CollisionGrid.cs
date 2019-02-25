@@ -32,12 +32,12 @@ public class CollisionGrid : CustomGrid
         return grid;
     }
 
-    public void AddCollidedPair(SpriteBody2D bodyA, SpriteBody2D bodyB)
+    public void AddCollidedPair(RawBody2D bodyA, RawBody2D bodyB)
     {
         collidedPairs.Add(new CollidedPair(bodyA, bodyB));
     }
 
-    public bool AddBodyToCell(SpriteBody2D body)
+    public bool AddBodyToCell(RawBody2D body)
     {
         //return;
         int cellIndex = GetCellIndex(body.Position);
@@ -49,7 +49,7 @@ public class CollisionGrid : CustomGrid
         return false;
     }
 
-    public void RemoveBodyFromCell(SpriteBody2D body)
+    public void RemoveBodyFromCell(RawBody2D body)
     {
         //return;
         if (body.collCellIndex < 0)
@@ -63,7 +63,7 @@ public class CollisionGrid : CustomGrid
         bounds = parentBounds;
     }
 
-    public void UpdateGridInBounds(Bounds parentBounds, List<SpriteBody2D> bodiesOutOfBounds)
+    public void UpdateGridInBounds(Bounds parentBounds, List<RawBody2D> bodiesOutOfBounds)
     {
         bounds = parentBounds;
         for (int i = 0; i < cells.Length; i++)
