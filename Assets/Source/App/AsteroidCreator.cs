@@ -57,7 +57,7 @@ public class AsteroidCreator : MonoBehaviour
 
     public List<RawAsteroid> RawAsteroids => rawAsteroids;
 
-    private Bounds cameraBounds;
+    private Bounds2 cameraBounds;
 
     private void Awake()
     {
@@ -100,11 +100,11 @@ public class AsteroidCreator : MonoBehaviour
     {
         Asteroid asteroidPrefab = Const.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
         asteroidPrefab.gameObject.SetActive(true);
-        asteroidPrefab.gameObject.layer = Const.Multithreading ? Const.LayerDefault : Const.LayerAsteroid;
+        asteroidPrefab.gameObject.layer = Const.LayerDefault;
         Rigidbody2D prefabRigidBody = asteroidPrefab.GetComponent<Rigidbody2D>();
         Collider2D prefabCollider = asteroidPrefab.GetComponent<Collider2D>();
-        prefabRigidBody.simulated = !Const.Multithreading;
-        prefabCollider.enabled = !Const.Multithreading;
+        prefabRigidBody.simulated = false;
+        prefabCollider.enabled = false;
         //prefabRigidBody.simulated = true;
         //prefabCollider.enabled = true;
         //Destroy(prefabRigidBody);
@@ -113,7 +113,7 @@ public class AsteroidCreator : MonoBehaviour
         Vector2 cellSize = spawnGrid.cellSize;
         Vector3Int cellPosition = Vector3Int.zero;
         Vector3 asteroidEuler = Vector3.zero;
-        Bounds asteroidBounds = asteroidPrefab.GetComponent<SpriteRenderer>().bounds;
+        Bounds2 asteroidBounds = Bounds2.BoundsToBounds2(asteroidPrefab.GetComponent<SpriteRenderer>().bounds);
         int halfXYCount = spawnGridHalfXYCount;
         for (int y = -halfXYCount; y < halfXYCount; y++)
         {
@@ -128,8 +128,8 @@ public class AsteroidCreator : MonoBehaviour
             }
         }
         int xyCount = halfXYCount << 1;
-        int halfXCountInView = Mathf.CeilToInt(cameraBounds.extents.x / cellSize.x);
-        int halfYCountInView = Mathf.CeilToInt(cameraBounds.extents.y / cellSize.y);
+        int halfXCountInView = Mathf.CeilToInt(cameraBounds.Extents.x / cellSize.x);
+        int halfYCountInView = Mathf.CeilToInt(cameraBounds.Extents.y / cellSize.y);
         for (int y = -halfYCountInView; y < halfYCountInView; y++)
         {
             int yIndex = (halfXYCount + y) * xyCount;
@@ -177,7 +177,7 @@ public class AsteroidCreator : MonoBehaviour
     public void RefreshCameraBounds()
     {
         if (Camera.main)
-            cameraBounds = Camera.main.GetOrthographicBounds();
+            cameraBounds = Camera.main.GetOrthographicBounds2();
     }
 
     public void Clear()

@@ -48,7 +48,7 @@ public class AppManager : Singleton<AppManager>
 
     private void Update()
     {
-        if (running && Const.Multithreading)
+        if (running)
         {
             threadGrid.WaitForAllThreads();
             threadGrid.PreSyncThreads();
@@ -99,8 +99,7 @@ public class AppManager : Singleton<AppManager>
     {
         stopRequested = true;
         threadGrid.RequestStop();
-        if (running && Const.Multithreading)
-            yield return new WaitWhile(() => running);
+        yield return new WaitWhile(() => running);
         yield return new WaitForSeconds(0.5f);
         mainPanel.FailText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1.5f);

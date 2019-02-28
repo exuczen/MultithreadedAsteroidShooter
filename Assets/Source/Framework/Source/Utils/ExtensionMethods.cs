@@ -1313,25 +1313,17 @@ namespace DC
 
 	public static class CameraExtensionMethods
 	{
-        public static Bounds GetOrthographicBoundsWithOffset(this Camera camera, float viewportOffset)
+        public static Bounds2 GetOrthographicBounds2WithOffset(this Camera camera, float viewportOffset)
         {
             float offset = viewportOffset * camera.orthographicSize;
-            Bounds bounds = new Bounds
-            {
-                center = (Vector2)camera.transform.position,
-                extents = new Vector2(camera.orthographicSize * Screen.width / Screen.height + offset, camera.orthographicSize + offset)
-            };
-            return bounds;
+            return new Bounds2(camera.transform.position,
+                new Vector2(camera.orthographicSize * Screen.width / Screen.height + offset, camera.orthographicSize + offset) * 2f);
         }
 
-        public static Bounds GetOrthographicBounds(this Camera camera)
+        public static Bounds2 GetOrthographicBounds2(this Camera camera)
         {
-            Bounds bounds = new Bounds
-            {
-                center = (Vector2)camera.transform.position,
-                extents = new Vector2(camera.orthographicSize * Screen.width / Screen.height, camera.orthographicSize)
-            };
-            return bounds;
+            return new Bounds2(camera.transform.position,
+                new Vector2(camera.orthographicSize * Screen.width / Screen.height, camera.orthographicSize) * 2f);
         }
 
         public static float GetTanHalfFovFromProjectionMatrix(this Camera camera)

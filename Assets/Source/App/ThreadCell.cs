@@ -7,9 +7,9 @@ public class ThreadCell : CustomCell
 
     private CollisionGrid collGrid;
 
-    private Bounds cameraBounds;
+    private Bounds2 cameraBounds;
 
-    public Bounds CameraBounds { get => cameraBounds; set => cameraBounds = value; }
+    public Bounds2 CameraBounds { get => cameraBounds; set => cameraBounds = value; }
 
     public ThreadCell CreateInstance(ThreadGrid threadGrid, Vector2Int cellXY, out EventWaitHandle threadWait)
     {
@@ -33,9 +33,9 @@ public class ThreadCell : CustomCell
         thread.PreSyncThread();
     }
 
-    public void UpdateBounds(Bounds cameraBounds)
+    public void UpdateBounds(Bounds2 cameraBounds)
     {
-        bounds.center = transform.position;
+        bounds.Center = transform.position;
         this.cameraBounds = cameraBounds;
     }
 

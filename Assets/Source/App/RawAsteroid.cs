@@ -4,27 +4,27 @@ public class RawAsteroid : RawBody2D
 {
     private AsteroidCreator creator;
 
-    public RawAsteroid(AsteroidCreator creator, Vector2 position, Vector3 eulerAngles, Bounds bounds, float radius) 
+    public RawAsteroid(AsteroidCreator creator, Vector2 position, Vector3 eulerAngles, Bounds2 bounds, float radius) 
         : base(position, eulerAngles, bounds, radius)
     {
         this.creator = creator;
     }
 
-    public void SetRandomPositionInBounds(Bounds rectBounds, Bounds camBounds)
+    public void SetRandomPositionInBounds(Bounds2 rectBounds, Bounds2 camBounds)
     {
         int randomSignX = (Random.Range(0, 2) << 1) - 1;
         int randomSignY = (Random.Range(0, 2) << 1) - 1;
-        Vector2 middlePos = rectBounds.center;
+        Vector2 middlePos = rectBounds.Center;
         float posX, posY;
         if (Random.Range(0, 2) == 0)
         {
-            posX = middlePos.x + randomSignX * Random.Range(camBounds.extents.x + bounds.extents.x, rectBounds.extents.x - bounds.size.x);
-            posY = middlePos.y + randomSignY * Random.Range(0f, rectBounds.extents.y - bounds.size.y);
+            posX = middlePos.x + randomSignX * Random.Range(camBounds.Extents.x + bounds.Extents.x, rectBounds.Extents.x - bounds.Size.x);
+            posY = middlePos.y + randomSignY * Random.Range(0f, rectBounds.Extents.y - bounds.Size.y);
         }
         else
         {
-            posY = middlePos.y + randomSignY * Random.Range(camBounds.extents.y + bounds.extents.y, rectBounds.extents.y - bounds.size.y);
-            posX = middlePos.x + randomSignX * Random.Range(0f, rectBounds.extents.x - bounds.size.x);
+            posY = middlePos.y + randomSignY * Random.Range(camBounds.Extents.y + bounds.Extents.y, rectBounds.Extents.y - bounds.Size.y);
+            posX = middlePos.x + randomSignX * Random.Range(0f, rectBounds.Extents.x - bounds.Size.x);
         }
         //float posX = middlePos.x + randomSignX * Random.Range(0f, camHalfSize.x);
         //float posY = middlePos.y + randomSignY * Random.Range(0f, camHalfSize.y);

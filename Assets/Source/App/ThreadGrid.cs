@@ -52,36 +52,28 @@ public class ThreadGrid : CustomGrid
         }
         //Debug.Log(GetType() + ".AddAsteroidsToThreadCells: " + threadsCount + " " + xCount + " " + yCount);
         SetParams(size, new Vector2Int(xCount, yCount));
-        bounds.center = transform.position = (Vector2)Camera.main.transform.position;
-        enabled = Const.Multithreading;
-        threadCellPrefab.gameObject.SetActive(enabled);
-        if (!enabled)
-        {
-            return;
-        }
-        else
-        {
-            threadCells = new ThreadCell[threadsCount];
-            cellThreadHandles = new EventWaitHandle[threadsCount];
-            
-            int collCellSize = asteroidCreator.CollCellSize;
-            for (int y = 0; y < yCount; y++)
-            {
-                for (int x = 0; x < xCount; x++)
-                {
-                    int cellIndex = y * xCount + x;
-                    ThreadCell cell = threadCellPrefab.CreateInstance(this, new Vector2Int(x, y), out cellThreadHandles[cellIndex]);
-                    cell.CreateCollisionGrid(collCellSize, collGridPrefab, collCellPrefab);
-                    cell.name = "ThreadCell" + cellIndex;
-                    threadCells[cellIndex] = cell;
-                }
-            }
-            List<RawAsteroid> asteroids = asteroidCreator.RawAsteroids;
+        bounds.Center = transform.position = (Vector2)Camera.main.transform.position;
+        //return;
+        threadCells = new ThreadCell[threadsCount];
+        cellThreadHandles = new EventWaitHandle[threadsCount];
 
-            for (int i = 0; i < asteroids.Count; i++)
+        int collCellSize = asteroidCreator.CollCellSize;
+        for (int y = 0; y < yCount; y++)
+        {
+            for (int x = 0; x < xCount; x++)
             {
-                AddBodyToThreadCell(asteroids[i]);
+                int cellIndex = y * xCount + x;
+                ThreadCell cell = threadCellPrefab.CreateInstance(this, new Vector2Int(x, y), out cellThreadHandles[cellIndex]);
+                cell.CreateCollisionGrid(collCellSize, collGridPrefab, collCellPrefab);
+                cell.name = "ThreadCell" + cellIndex;
+                threadCells[cellIndex] = cell;
             }
+        }
+        List<RawAsteroid> asteroids = asteroidCreator.RawAsteroids;
+
+        for (int i = 0; i < asteroids.Count; i++)
+        {
+            AddBodyToThreadCell(asteroids[i]);
         }
         threadCellPrefab.gameObject.SetActive(false);
     }
@@ -101,8 +93,8 @@ public class ThreadGrid : CustomGrid
 
     public void UpdateBounds()
     {
-        Bounds cameraBounds = Camera.main.GetOrthographicBoundsWithOffset(0.1f);
-        bounds.center = transform.position = cameraBounds.center;
+        Bounds2 cameraBounds = Camera.main.GetOrthographicBounds2WithOffset(0.1f);
+        bounds.Center = transform.position = cameraBounds.Center;
 
         for (int j = 0; j < threadCells.Length; j++)
         {

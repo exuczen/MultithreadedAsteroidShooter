@@ -18,7 +18,7 @@ public abstract class RawBody2D
     protected Rigidbody2D rigidBody;
     protected Collider2D collider;
 
-    protected Bounds bounds;
+    protected Bounds2 bounds;
     private Vector2Int sizeInt;
     private Vector2Int halfSizeInt;
     private int radiusInt;
@@ -26,12 +26,12 @@ public abstract class RawBody2D
     protected float respawnTime;
     protected int layer;
 
-    public Bounds Bounds { get => bounds; }
+    public Bounds2 Bounds { get => bounds; }
     public float RespawnTime { get => respawnTime; set => respawnTime = value; }
     public int Layer { get => layer; set { layer = value; } }
     public Quaternion Rotation { get => Quaternion.Euler(eulerAngles); }
 
-    public RawBody2D(Vector2 position, Vector3 eulerAngles, Bounds bounds, float radius)
+    public RawBody2D(Vector2 position, Vector3 eulerAngles, Bounds2 bounds, float radius)
     {
         this.position = position;
         this.eulerAngles = eulerAngles;
@@ -65,15 +65,15 @@ public abstract class RawBody2D
         this.angularVelocity = angularVelocity;
     }
 
-    private void SetSizeData(Bounds bounds, float radiusNormalized)
+    private void SetSizeData(Bounds2 bounds, float radiusNormalized)
     {
         this.bounds = bounds;
-        bounds.center = position;
-        sizeInt.x = (int)(bounds.size.x * Const.FloatToIntFactor);
-        sizeInt.y = (int)(bounds.size.y * Const.FloatToIntFactor);
+        bounds.Center = position;
+        sizeInt.x = (int)(bounds.Size.x * Const.FloatToIntFactor);
+        sizeInt.y = (int)(bounds.Size.y * Const.FloatToIntFactor);
         halfSizeInt.x = sizeInt.x >> 1;
         halfSizeInt.y = sizeInt.y >> 1;
-        radiusInt = (int)(radiusNormalized * Mathf.Max(bounds.extents.x, bounds.extents.y) * Const.FloatToIntFactor);
+        radiusInt = (int)(radiusNormalized * Mathf.Max(bounds.Extents.x, bounds.Extents.y) * Const.FloatToIntFactor);
     }
 
     public bool RadiusOverlap(RawBody2D body, int dxInt, int dyInt)
@@ -98,7 +98,7 @@ public abstract class RawBody2D
     {
         position += velocity * deltaTime;
         eulerAngles.z += angularVelocity * deltaTime;
-        bounds.center = position;
+        bounds.Center = position;
         positionInt.x = (int)(position.x * Const.FloatToIntFactor);
         positionInt.y = (int)(position.y * Const.FloatToIntFactor);
     }

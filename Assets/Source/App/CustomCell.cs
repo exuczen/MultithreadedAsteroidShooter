@@ -7,13 +7,13 @@ public class CustomCell : MonoBehaviour
 
     protected int index;
 
-    protected Bounds bounds;
+    protected Bounds2 bounds;
 
     protected CustomGrid grid;
 
     protected bool isMiddle;
 
-    public Bounds Bounds { get => bounds; set => bounds = value; }
+    public Bounds2 Bounds { get => bounds; set => bounds = value; }
 
     public int Index { get => index; set => index = value; }
 
@@ -37,19 +37,19 @@ public class CustomCell : MonoBehaviour
         this.xy = cellXY;
         this.index = cellXY.y * grid.XYCount.x + cellXY.x;
         this.UpdateBounds();
-        Bounds spriteBounds = GetComponent<SpriteRenderer>().sprite.bounds;
+        Bounds2 spriteBounds = Bounds2.BoundsToBounds2(GetComponent<SpriteRenderer>().sprite.bounds);
         Vector3 parentLossyScale = transform.parent ? transform.parent.lossyScale : Vector3.one;
-        transform.localScale = bounds.size / (parentLossyScale * (Vector2)spriteBounds.size);
-        transform.position = new Vector3(bounds.center.x, bounds.center.y, 0f);
+        transform.localScale = bounds.Size / (parentLossyScale * (Vector2)spriteBounds.Size);
+        transform.position = new Vector3(bounds.Center.x, bounds.Center.y, 0f);
     }
 
     public void UpdateBounds()
     {
         float bottomLeftCellCenterX = grid.BottomLeft.x + (grid.CellSize.x / 2f);
         float bottomLeftCellCenterY = grid.BottomLeft.y + (grid.CellSize.y / 2f);
-        bounds.center = new Vector2(
+        bounds.Center = new Vector2(
                 bottomLeftCellCenterX + xy.x * grid.CellSize.x,
                 bottomLeftCellCenterY + xy.y * grid.CellSize.y);
-        bounds.size = grid.CellSize;
+        bounds.Size = grid.CellSize;
     }
 }

@@ -14,9 +14,9 @@ public class CellThread : SyncedThread
 
     private ThreadCell cell;
 
-    private Bounds cellBounds;
+    private Bounds2 cellBounds;
 
-    private Bounds cameraBounds;
+    private Bounds2 cameraBounds;
 
     private CollisionGrid collGrid;
 
@@ -115,7 +115,7 @@ public class CellThread : SyncedThread
             }
             body.Position = position;
 
-            Vector2 cellSize = cellBounds.size;
+            Vector2 cellSize = cellBounds.Size;
             int cellX = ((int)(ray.x / cellSize.x) + gridXYCount.x) % gridXYCount.x;
             int cellY = ((int)(ray.y / cellSize.y) + gridXYCount.y) % gridXYCount.y;
             int cellIndex = cellY * gridXYCount.x + cellX;

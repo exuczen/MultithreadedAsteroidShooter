@@ -9,20 +9,20 @@ public class CollisionGrid : CustomGrid
 
     protected List<CollidedPair> collidedPairs = new List<CollidedPair>();
 
-    private Bounds cameraBounds;
+    private Bounds2 cameraBounds;
 
     public List<CollidedPair> CollidedPairs { get => collidedPairs; }
 
-    public Bounds CameraBounds { get => cameraBounds; set => cameraBounds = value; }
+    public Bounds2 CameraBounds { get => cameraBounds; set => cameraBounds = value; }
 
     public CollisionCell[] Cells { get => cells; }
 
     public CollisionGrid CreateInstance(CustomCell parentCell, CollisionCell collCellPrefab, int cellSize)
     {
-        Bounds bounds = parentCell.Bounds;
+        Bounds2 bounds = parentCell.Bounds;
         //Debug.Log(GetType() + ".CollisionGrid: " + bounds.center + " " + bounds.size + " " + cellSize + " " + parentCell.MiddleAnchor);
-        int xCount = Mathf.Max(1, (int)(bounds.size.x / cellSize));
-        int yCount = Mathf.Max(1, (int)(bounds.size.y / cellSize));
+        int xCount = Mathf.Max(1, (int)(bounds.Size.x / cellSize));
+        int yCount = Mathf.Max(1, (int)(bounds.Size.y / cellSize));
         Vector2Int xyCount = new Vector2Int(xCount, yCount);
         CollisionGrid grid = CreateInstance<CollisionGrid>(parentCell.transform, bounds, xyCount);
         grid.cells = new CollisionCell[xCount * yCount];
@@ -64,7 +64,7 @@ public class CollisionGrid : CustomGrid
             cells[body.collCellIndex].RemoveBody(body);
     }
 
-    private void UpdateBounds(Bounds parentBounds, Bounds cameraBounds)
+    private void UpdateBounds(Bounds2 parentBounds, Bounds2 cameraBounds)
     {
         this.cameraBounds = cameraBounds;
         bounds = parentBounds;
@@ -74,7 +74,7 @@ public class CollisionGrid : CustomGrid
         }
     }
 
-    public void UpdateGridInBounds(Bounds parentBounds, Bounds cameraBounds)
+    public void UpdateGridInBounds(Bounds2 parentBounds, Bounds2 cameraBounds)
     {
         UpdateBounds(parentBounds, cameraBounds);
         for (int i = 0; i < cells.Length; i++)

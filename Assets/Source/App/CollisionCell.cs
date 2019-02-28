@@ -79,7 +79,7 @@ public class CollisionCell : CustomCell
         if (isMiddle)
         {
             bodiesInCameraView.Clear();
-            Bounds cameraBounds = collGrid.CameraBounds;
+            Bounds2 cameraBounds = collGrid.CameraBounds;
             for (int i = 0; i < bodies.Count; i++)
             {
                 RawBody2D body = bodies[i];

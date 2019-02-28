@@ -3,55 +3,55 @@
 [RequireComponent(typeof(SpriteRenderer))]
 public class CustomGrid : MonoBehaviour
 {
-    protected Bounds bounds;
+    protected Bounds2 bounds;
     protected Vector2 cellSize;
     protected Vector2Int xyCount;
 
     public Vector2 BottomLeft
     {
-        get => bounds.min;
+        get => bounds.Min;
         set {
-            bounds.min = value;
+            bounds.Min = value;
         }
     }
 
     public Vector2Int XYCount => xyCount;
 
-    public Vector2 Size => bounds.size;
+    public Vector2 Size => bounds.Size;
 
-    public Vector2 Center => bounds.center;
+    public Vector2 Center => bounds.Center;
 
     public Vector2 CellSize => cellSize;
 
-    public Bounds Bounds => bounds;
+    public Bounds2 Bounds => bounds;
 
-    public T CreateInstance<T>(Transform parent, Bounds bounds, Vector2Int xyCount) where T : CustomGrid
+    public T CreateInstance<T>(Transform parent, Bounds2 bounds, Vector2Int xyCount) where T : CustomGrid
     {
         T grid = Instantiate(this as T, parent, false);
         grid.SetParams(bounds, xyCount);
         return grid;
     }
 
-    private void SetParams(Bounds bounds, Vector2Int xyCount)
+    private void SetParams(Bounds2 bounds, Vector2Int xyCount)
     {
         //Debug.Log(GetType() + ".SetParams " + bounds + " " + xyCount);
         this.xyCount = xyCount;
         this.bounds = bounds;
         cellSize = new Vector2(Size.x / xyCount.x, Size.y / xyCount.y);
-        Bounds spriteBounds = GetComponent<SpriteRenderer>().sprite.bounds;
+        Bounds2 spriteBounds = Bounds2.BoundsToBounds2(GetComponent<SpriteRenderer>().sprite.bounds);
         Vector3 parentLossyScale = transform.parent ? transform.parent.lossyScale : Vector3.one;
-        transform.localScale = bounds.size / (parentLossyScale * (Vector2)spriteBounds.size);
+        transform.localScale = bounds.Size / (parentLossyScale * (Vector2)spriteBounds.Size);
     }
 
     public void SetParams(Vector2 size, Vector2Int xyCount)
     {
-        SetParams(new Bounds(Vector2.zero, size), xyCount);
+        SetParams(new Bounds2(Vector2.zero, size), xyCount);
     }
 
     public int GetCellIndex(Vector2 position)
     {
-        float rayX = position.x - bounds.min.x;
-        float rayY = position.y - bounds.min.y;
+        float rayX = position.x - bounds.Min.x;
+        float rayY = position.y - bounds.Min.y;
         int cellX = (int)(rayX / cellSize.x);
         int cellY = (int)(rayY / cellSize.y);
         if (cellX >= 0 && cellX < xyCount.x && cellY >= 0 && cellY < xyCount.y)
