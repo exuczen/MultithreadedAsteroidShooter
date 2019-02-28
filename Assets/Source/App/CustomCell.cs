@@ -43,7 +43,7 @@ public class CustomCell : MonoBehaviour
         transform.position = new Vector3(bounds.center.x, bounds.center.y, 0f);
     }
 
-    protected void UpdateBounds()
+    public void UpdateBounds()
     {
         float bottomLeftCellCenterX = grid.BottomLeft.x + (grid.CellSize.x / 2f);
         float bottomLeftCellCenterY = grid.BottomLeft.y + (grid.CellSize.y / 2f);

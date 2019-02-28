@@ -11588,8 +11588,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99001b4bea0111b4c97c4c9cf04355eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threadCellIndex: 0
-  collCellIndex: 0
 --- !u!212 &1606720673
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11997,8 +11995,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99001b4bea0111b4c97c4c9cf04355eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threadCellIndex: 0
-  collCellIndex: 0
 --- !u!212 &1761306171
 SpriteRenderer:
   m_ObjectHideFlags: 0

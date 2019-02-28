@@ -43,7 +43,7 @@ public class AppManager : Singleton<AppManager>
 
         debugPanel.gameObject.SetActive(true);
 
-        mainPanel.onRectTransformDimensionsChange = asteroidCreator.RefreshCameraSize;
+        mainPanel.onRectTransformDimensionsChange = asteroidCreator.RefreshCameraBounds;
     }
 
     private void Update()
@@ -54,6 +54,7 @@ public class AppManager : Singleton<AppManager>
             threadGrid.PreSyncThreads();
 
             asteroidCreator.AddAsteroidsToRespawnInThreadCells(threadGrid);
+            asteroidCreator.DestroyAsteroidGameObjectsOutOfView();
 
             threadGrid.UpdateBounds();
             threadGrid.SyncThreads();

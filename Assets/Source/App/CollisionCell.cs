@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using DC;
 
 public class CollisionCell : CustomCell
 {
@@ -12,11 +13,17 @@ public class CollisionCell : CustomCell
 
     private List<RawBody2D> bodies = new List<RawBody2D>();
 
+    private List<RawBody2D> bodiesOutOfBounds = new List<RawBody2D>();
+
+    private List<RawBody2D> bodiesInCameraView = new List<RawBody2D>();
+
     private CollisionGrid collGrid;
 
     private Color color;
 
     public int BodyCount { get => bodies.Count; }
+
+    public List<RawBody2D> BodiesInCameraView { get => bodiesInCameraView; }
 
     public CollisionCell CreateInstance(CustomCell parentCell, CollisionGrid grid, Vector2Int cellXY, Color[] colors)
     {
@@ -60,27 +67,52 @@ public class CollisionCell : CustomCell
 
     public void AddBody(RawBody2D body)
     {
-        //Debug.LogWarning(GetType() + ".AddBody: cellIndex=" + index + " color=" + color);
+        //Debug.LogWarning(GetType() + ".AddBody: cellIndex=" + index + " color=" + color + " isMiddle=" + isMiddle);
         body.SetSpriteColor(Const.DebugSprites ? color : Color.white);
         body.collCellIndex = index;
         body.Layer = isMiddle ? CollisionLayer : DefaultLayer;
         bodies.Add(body);
     }
 
-    public void UpdateBodiesOutOfCellBounds(List<RawBody2D> bodiesOutOfBounds)
+    public void AddBodiesInCameraView()
     {
-        UpdateBounds();
-        //return;
-        //Bounds2Int scaledBounds = bounds.GetScaledBounds(Const.FloatToIntFactorLog2);
+        if (isMiddle)
+        {
+            bodiesInCameraView.Clear();
+            Bounds cameraBounds = collGrid.CameraBounds;
+            for (int i = 0; i < bodies.Count; i++)
+            {
+                RawBody2D body = bodies[i];
+                body.isInCameraView = cameraBounds.Contains(body.Position);
+                if (body.isInCameraView)
+                {
+                    bodiesInCameraView.Add(body);
+                }
+            }
+        }
+    }
+
+    public void AddBodiesOutOfCellBounds()
+    {
         for (int i = 0; i < bodies.Count; i++)
         {
             RawBody2D body = bodies[i];
             if (!bounds.Contains(body.Position))
             {
-                RemoveBody(body);
-                collGrid.AddBodyToCell(body);
+                bodiesOutOfBounds.Add(body);
             }
         }
+    }
+
+    public void ReassignBodiesOutOfCellBounds()
+    {
+        for (int i = 0; i < bodiesOutOfBounds.Count; i++)
+        {
+            RawBody2D body = bodiesOutOfBounds[i];
+            RemoveBody(body);
+            collGrid.AddBodyToCell(body);
+        }
+        bodiesOutOfBounds.Clear();
     }
 
     public void UpdateCollisions()
@@ -99,4 +131,13 @@ public class CollisionCell : CustomCell
             }
         }
     }
+
+    public void GetBodiesInCameraView(List<RawBody2D> list)
+    {
+        if (isMiddle)
+        {
+            list.AddRange(bodiesInCameraView);
+        }
+    }
+
 }

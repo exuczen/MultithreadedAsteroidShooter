@@ -1,21 +1,23 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class RawBody2D : MonoBehaviour
+public abstract class RawBody2D
 {
-    [HideInInspector]
     public int threadCellIndex;
-    [HideInInspector]
     public int collCellIndex;
+    public bool isInCameraView;
 
     private Vector2 position;
     private Vector2 velocity;
     private Vector2Int positionInt;
     private Vector3 eulerAngles;
     private float angularVelocity;
+
+    protected Transform transform;
     private SpriteRenderer spriteRenderer;
     protected Rigidbody2D rigidBody;
-    protected new Collider2D collider;
+    protected Collider2D collider;
+
     protected Bounds bounds;
     private Vector2Int sizeInt;
     private Vector2Int halfSizeInt;
@@ -26,25 +28,16 @@ public abstract class RawBody2D : MonoBehaviour
 
     public Bounds Bounds { get => bounds; }
     public float RespawnTime { get => respawnTime; set => respawnTime = value; }
-    public Collider2D Collider { get => collider; }
-    public Rigidbody2D RigidBody { get => rigidBody; }
     public int Layer { get => layer; set { layer = value; } }
+    public Quaternion Rotation { get => Quaternion.Euler(eulerAngles); }
 
-    public T CreateInstance<T>(Transform parent, Vector3 position, float r) where T : RawBody2D
+    public RawBody2D(Vector2 position, Vector3 eulerAngles, Bounds bounds, float radius)
     {
-        T body = Instantiate(this as T, position, Quaternion.identity, parent);
-        body.Initialize(r);
-        return body;
-    }
-
-    public void Initialize(float r)
-    {
+        this.position = position;
+        this.eulerAngles = eulerAngles;
         layer = Const.LayerDefault;
-        rigidBody = GetComponent<Rigidbody2D>();
-        collider = GetComponent<Collider2D>();
-        spriteRenderer = transform.GetComponent<SpriteRenderer>();
-        SetMotionDataFromTransform();
-        SetSpriteData(r);
+        isInCameraView = false;
+        SetSizeData(bounds, radius);
     }
 
     public Vector2 Position
@@ -57,14 +50,11 @@ public abstract class RawBody2D : MonoBehaviour
         }
     }
 
-    public Vector2Int PositionInt
-    {
-        get => positionInt;
-    }
-    
+    public Vector2Int PositionInt { get => positionInt; }
+
     public void ResetData()
     {
-        spriteColor = spriteRenderer.color = Color.black;
+        spriteColor = Color.black;
         threadCellIndex = -1;
         collCellIndex = -1;
     }
@@ -75,18 +65,10 @@ public abstract class RawBody2D : MonoBehaviour
         this.angularVelocity = angularVelocity;
     }
 
-    public void SetMotionDataFromTransform()
+    private void SetSizeData(Bounds bounds, float radiusNormalized)
     {
-        position = transform.position;
-        eulerAngles.z = transform.eulerAngles.z;
-    }
-
-    public void SetSpriteData(float radiusNormalized)
-    {
-        bounds = spriteRenderer.bounds;
-        bounds.size *= 1f;
+        this.bounds = bounds;
         bounds.center = position;
-        spriteColor = spriteRenderer.color;
         sizeInt.x = (int)(bounds.size.x * Const.FloatToIntFactor);
         sizeInt.y = (int)(bounds.size.y * Const.FloatToIntFactor);
         halfSizeInt.x = sizeInt.x >> 1;
@@ -121,14 +103,17 @@ public abstract class RawBody2D : MonoBehaviour
         positionInt.y = (int)(position.y * Const.FloatToIntFactor);
     }
 
-    public void SetMainThreadData()
+    public void SetGameObjectData()
     {
+        if (!transform)
+            CreateGameObject();
+
         transform.position = position;
         transform.eulerAngles = eulerAngles;
         spriteRenderer.color = spriteColor;
-        if (layer != gameObject.layer)
+        if (layer != transform.gameObject.layer)
         {
-            gameObject.layer = layer;
+            transform.gameObject.layer = layer;
             bool collisionLayer = layer == CollisionCell.CollisionLayer;
             rigidBody.simulated = collisionLayer;
             collider.enabled = collisionLayer;
@@ -140,7 +125,32 @@ public abstract class RawBody2D : MonoBehaviour
         spriteColor = c;
     }
 
+    public void DestroyGameObject()
+    {
+        if (transform)
+        {
+            GameObject.Destroy(transform.gameObject);
+        }
+        transform = null;
+        spriteRenderer = null;
+        rigidBody = null;
+        collider = null;
+        isInCameraView = false;
+    }
+
+    protected abstract GameObject CreateGameObjectInstance();
+
+    public void CreateGameObject()
+    {
+        GameObject gameObject = CreateGameObjectInstance();
+        transform = gameObject.transform;
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        rigidBody = transform.GetComponent<Rigidbody2D>();
+        collider = transform.GetComponent<Collider2D>();
+    }
+
     public abstract void Explode(Vector2 explosionPos);
 
     public abstract void Respawn();
+
 }

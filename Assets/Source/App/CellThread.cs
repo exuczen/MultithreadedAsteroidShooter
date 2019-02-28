@@ -16,23 +16,25 @@ public class CellThread : SyncedThread
 
     private Bounds cellBounds;
 
+    private Bounds cameraBounds;
+
     private CollisionGrid collGrid;
 
     public CollisionGrid CollGrid { set => collGrid = value; }
 
-    protected Vector2 gridSize;
-    protected Vector2 gridBottomLeft;
-    protected Vector2Int gridXYCount;
+    private Vector2 gridSize;
+    private Vector2 gridBottomLeft;
+    private Vector2Int gridXYCount;
 
     private bool running;
 
-    private void CopyGridParams()
+    private void CopyParentData()
     {
         cellBounds = cell.Bounds;
+        cameraBounds = cell.CameraBounds;
         gridSize = grid.Size;
         gridBottomLeft = grid.BottomLeft;
         gridXYCount = grid.XYCount;
-
         //Debug.LogWarning(GetType() + ".**");
         //Debug.LogWarning(GetType() + "." + gridSize + " " + grid.ScaledSize);
         //Debug.LogWarning(GetType() + "." + gridBottomLeft + " " + grid.ScaledBottomLeft);
@@ -42,7 +44,7 @@ public class CellThread : SyncedThread
     {
         this.cell = cell;
         this.grid = grid;
-        CopyGridParams();
+        CopyParentData();
     }
 
     public override void PreSyncThread()
@@ -80,19 +82,20 @@ public class CellThread : SyncedThread
 
     public override void SyncThread()
     {
-        for (int i = 0; i < bodies.Count; i++)
+        collGrid.GetBodiesInCameraView(out List<RawBody2D> bodiesInCameraView);
+        for (int i = 0; i < bodiesInCameraView.Count; i++)
         {
-            bodies[i].SetMainThreadData();
+            bodiesInCameraView[i].SetGameObjectData();
         }
         running = cell.enabled && cell.gameObject.activeInHierarchy;
         //for (int i = 0; i < collGrid.Cells.Length; i++)
         //{
         //    Debug.Log(GetType() + "[" + i + "].BodyCount: " + collGrid.Cells[i].BodyCount);
         //}
-        CopyGridParams();
+        CopyParentData();
     }
 
-    private int UpdateBodyOutOfBounds(RawBody2D body, int bodyIndex)
+    private void UpdateBodyOutOfBounds(RawBody2D body)
     {
         Vector2 position = body.Position;
         if (!cellBounds.Contains(position))
@@ -118,12 +121,8 @@ public class CellThread : SyncedThread
             int cellIndex = cellY * gridXYCount.x + cellX;
             body.threadCellIndex = cellIndex;
 
-            bodies.RemoveAt(bodyIndex);
-            collGrid.RemoveBodyFromCell(body);
             bodiesOutOfBounds.Add(body);
-            bodyIndex--;
         }
-        return bodyIndex;
     }
 
     protected override void UpdateThread(float deltaTime)
@@ -134,10 +133,14 @@ public class CellThread : SyncedThread
         {
             RawBody2D body = bodies[i];
             body.UpdateMotionData(deltaTime);
-            i = UpdateBodyOutOfBounds(body, i);
+            UpdateBodyOutOfBounds(body);
         }
-        collGrid.UpdateGridInBounds(cellBounds, bodiesOutOfBounds);
-        collGrid.UpdateCollisions(cellBounds);
+        for (int i = 0; i < bodiesOutOfBounds.Count; i++)
+        {
+            RemoveBody(bodiesOutOfBounds[i]);
+        }
+        collGrid.UpdateGridInBounds(cellBounds, cameraBounds);
+        collGrid.UpdateCollisions();
         RemoveCollidedBodies();
     }
 

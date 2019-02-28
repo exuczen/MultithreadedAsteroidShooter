@@ -24,7 +24,7 @@ public class AsteroidCreator : MonoBehaviour
 
     private ThreadGrid threadGrid;
 
-    private List<Asteroid> asteroidsToRespawn = new List<Asteroid>();
+    private List<RawAsteroid> asteroidsToRespawn = new List<RawAsteroid>();
 
     //private const int spawnGridHalfXYCount = 40;
     private const int spawnGridHalfXYCount = 80;
@@ -45,17 +45,19 @@ public class AsteroidCreator : MonoBehaviour
 
     private Vector2 spawnGridSize;
 
-    private List<Asteroid> respawnList = new List<Asteroid>();
+    private List<RawAsteroid> rawAsteroids = new List<RawAsteroid>();
 
-    public Vector2 SpawnGridSize { get => spawnGridSize; }
+    public Vector2 SpawnGridSize => spawnGridSize;
 
-    public int CollCellSize { get => collCellSize; }
+    public int CollCellSize => collCellSize;
 
-    public Transform AsteroidContainer { get => asteroidContainer; }
+    public Transform AsteroidContainer => asteroidContainer;
 
     public int TotalAsteroidsCount => asteroidContainer.childCount;
 
-    private Vector2 cameraHalfSize;
+    public List<RawAsteroid> RawAsteroids => rawAsteroids;
+
+    private Bounds cameraBounds;
 
     private void Awake()
     {
@@ -65,11 +67,33 @@ public class AsteroidCreator : MonoBehaviour
         collCellSize = cellSize * spawnInCollCellCount;
         spawnGrid.cellSize = new Vector2(cellSize, cellSize);
         spawnGridSize = new Vector2(cellSize * spawnGridHalfXYCount * 2, cellSize * spawnGridHalfXYCount * 2);
+
+        RefreshCameraBounds();
     }
 
     private void Start()
     {
-        RefreshCameraSize();
+    }
+
+    public void DestroyAsteroidGameObjectsOutOfView()
+    {
+        List<Asteroid> list = new List<Asteroid>();
+        //asteroidContainer.GetComponentsInChildren(true, list);
+        for (int i = 0; i < asteroidContainer.childCount; i++)
+        {
+            list.Add(asteroidContainer.GetChild(i).GetComponent<Asteroid>());
+        }
+        List<Asteroid> outOfViewList = list.FindAll(asteroid => !asteroid.RawAsteroid.isInCameraView);
+        foreach (Asteroid asteroid in outOfViewList)
+        {
+            asteroid.RawAsteroid.DestroyGameObject();
+        }
+    }
+
+    public Asteroid CreateAsteroidGameObject(RawAsteroid rawAsteroid)
+    {
+        Asteroid asteroidPrefab = Const.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
+        return asteroidPrefab.CreateInstance(this, asteroidContainer, rawAsteroid);
     }
 
     public void CreateAsteroids()
@@ -86,7 +110,10 @@ public class AsteroidCreator : MonoBehaviour
         //Destroy(prefabRigidBody);
         //Destroy(prefabColliders);
 
+        Vector2 cellSize = spawnGrid.cellSize;
         Vector3Int cellPosition = Vector3Int.zero;
+        Vector3 asteroidEuler = Vector3.zero;
+        Bounds asteroidBounds = asteroidPrefab.GetComponent<SpriteRenderer>().bounds;
         int halfXYCount = spawnGridHalfXYCount;
         for (int y = -halfXYCount; y < halfXYCount; y++)
         {
@@ -94,10 +121,25 @@ public class AsteroidCreator : MonoBehaviour
             {
                 cellPosition.Set(x, y, 0);
                 Vector3 asteroidPos = spawnGrid.GetCellCenterWorld(cellPosition);
-                Asteroid asteroid = asteroidPrefab.CreateInstance(this, asteroidContainer, asteroidPos);
-                asteroid.SetRandomVelocities(linearVelocityMin, linearVelocityMax, angularVelocityMin, angularVelocityMax);
+                RawAsteroid rawAsteroid = new RawAsteroid(this, asteroidPos, asteroidEuler, asteroidBounds, 0.65f);
+                rawAsteroid.SetRandomVelocities(linearVelocityMin, linearVelocityMax, angularVelocityMin, angularVelocityMax);
+                //rawAsteroid.CreateGameObject();
+                rawAsteroids.Add(rawAsteroid);
             }
         }
+        int xyCount = halfXYCount << 1;
+        int halfXCountInView = Mathf.CeilToInt(cameraBounds.extents.x / cellSize.x);
+        int halfYCountInView = Mathf.CeilToInt(cameraBounds.extents.y / cellSize.y);
+        for (int y = -halfYCountInView; y < halfYCountInView; y++)
+        {
+            int yIndex = (halfXYCount + y) * xyCount;
+            for (int x = -halfXCountInView; x < halfXCountInView; x++)
+            {
+                int index = yIndex + halfXYCount + x;
+                rawAsteroids[index].CreateGameObject();
+            }
+        }
+
         prefabRigidBody.simulated = false;
         prefabCollider.enabled = false;
         this.debugAsteroidPrefab.gameObject.SetActive(false);
@@ -113,21 +155,16 @@ public class AsteroidCreator : MonoBehaviour
         asteroidsToRespawn.Clear();
     }
 
-    public void AddAsteroidToRespawn(Asteroid asteroid)
+    public void AddAsteroidToRespawn(RawAsteroid asteroid)
     {
-        if (asteroid.gameObject.activeSelf)
-        {
-            asteroid.RespawnTime = Time.time + Const.BodyRespawnInterval;
-            asteroidsToRespawn.Add(asteroid);
-            asteroid.gameObject.SetActive(false);
-        }
+        asteroid.RespawnTime = Time.time + Const.BodyRespawnInterval;
+        asteroidsToRespawn.Add(asteroid);
     }
 
-    public void RespawnAsteroid(Asteroid asteroid)
+    public void RespawnAsteroid(RawAsteroid asteroid)
     {
         asteroid.SetRandomVelocities(linearVelocityMin, linearVelocityMax, angularVelocityMin, angularVelocityMax);
-        asteroid.SetRandomPositionInBounds(threadGrid.Bounds, cameraHalfSize);
-        asteroid.gameObject.SetActive(true);
+        asteroid.SetRandomPositionInBounds(threadGrid.Bounds, cameraBounds);
     }
 
     public void StartExplosion(Vector2 pos)
@@ -137,25 +174,20 @@ public class AsteroidCreator : MonoBehaviour
         explosion.Play();
     }
 
-    public void RefreshCameraSize()
+    public void RefreshCameraBounds()
     {
-        Camera camera = Camera.main;
-        if (camera)
-        {
-            cameraHalfSize = new Vector2(camera.orthographicSize * Screen.width / Screen.height, camera.orthographicSize);
-        }
+        if (Camera.main)
+            cameraBounds = Camera.main.GetOrthographicBounds();
     }
 
     public void Clear()
     {
-        foreach (Transform child in asteroidContainer)
-        {
-            Destroy(child.gameObject);
-        }
-        foreach (Transform child in explosionContainer)
-        {
-            Destroy(child.gameObject);
-        }
+        rawAsteroids.Clear();
+
+        asteroidContainer.DestroyAllChildren();
+
+        explosionContainer.DestroyAllChildren();
+
         asteroidsToRespawn.Clear();
     }
 }

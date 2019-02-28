@@ -9,7 +9,13 @@ public class CollisionGrid : CustomGrid
 
     protected List<CollidedPair> collidedPairs = new List<CollidedPair>();
 
+    private Bounds cameraBounds;
+
     public List<CollidedPair> CollidedPairs { get => collidedPairs; }
+
+    public Bounds CameraBounds { get => cameraBounds; set => cameraBounds = value; }
+
+    public CollisionCell[] Cells { get => cells; }
 
     public CollisionGrid CreateInstance(CustomCell parentCell, CollisionCell collCellPrefab, int cellSize)
     {
@@ -58,27 +64,44 @@ public class CollisionGrid : CustomGrid
             cells[body.collCellIndex].RemoveBody(body);
     }
 
-    public void UpdateBounds(Bounds parentBounds)
+    private void UpdateBounds(Bounds parentBounds, Bounds cameraBounds)
     {
-        bounds = parentBounds;
-    }
-
-    public void UpdateGridInBounds(Bounds parentBounds, List<RawBody2D> bodiesOutOfBounds)
-    {
+        this.cameraBounds = cameraBounds;
         bounds = parentBounds;
         for (int i = 0; i < cells.Length; i++)
         {
-            cells[i].UpdateBodiesOutOfCellBounds(bodiesOutOfBounds);
+            cells[i].UpdateBounds();
         }
     }
 
-    public void UpdateCollisions(Bounds parentBounds)
+    public void UpdateGridInBounds(Bounds parentBounds, Bounds cameraBounds)
     {
-        bounds = parentBounds;
+        UpdateBounds(parentBounds, cameraBounds);
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].AddBodiesInCameraView();
+            cells[i].AddBodiesOutOfCellBounds();
+        }
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].ReassignBodiesOutOfCellBounds();
+        }
+    }
+
+    public void UpdateCollisions()
+    {
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].UpdateCollisions();
         }
     }
 
+    public void GetBodiesInCameraView(out List<RawBody2D> list)
+    {
+        list = new List<RawBody2D>();
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].GetBodiesInCameraView(list);
+        }
+    }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Threading;
+using System.Collections.Generic;
 using UnityEngine;
+using DC;
 
 public class ThreadGrid : CustomGrid
 {
@@ -50,7 +52,7 @@ public class ThreadGrid : CustomGrid
         }
         //Debug.Log(GetType() + ".AddAsteroidsToThreadCells: " + threadsCount + " " + xCount + " " + yCount);
         SetParams(size, new Vector2Int(xCount, yCount));
-        UpdateBounds();
+        bounds.center = transform.position = (Vector2)Camera.main.transform.position;
         enabled = Const.Multithreading;
         threadCellPrefab.gameObject.SetActive(enabled);
         if (!enabled)
@@ -74,16 +76,11 @@ public class ThreadGrid : CustomGrid
                     threadCells[cellIndex] = cell;
                 }
             }
-            Transform asteroids = asteroidCreator.AsteroidContainer;
+            List<RawAsteroid> asteroids = asteroidCreator.RawAsteroids;
 
-            //Debug.Log(GetType() + ". " + Const.FloatToIntFactor + " " + Const.FloatToIntFactorLog2);
-            for (int i = 0; i < asteroids.childCount; i++)
+            for (int i = 0; i < asteroids.Count; i++)
             {
-                Transform asteroidTransform = asteroids.GetChild(i);
-                RawBody2D body = asteroidTransform.GetComponent<RawBody2D>();
-                body.Position = asteroidTransform.position;
-                int cellIndex = GetCellIndex(body.Position);
-                threadCells[cellIndex].AddBody(body);
+                AddBodyToThreadCell(asteroids[i]);
             }
         }
         threadCellPrefab.gameObject.SetActive(false);
@@ -104,8 +101,13 @@ public class ThreadGrid : CustomGrid
 
     public void UpdateBounds()
     {
-        Vector2 camPos = Camera.main.transform.position;
-        bounds.center = transform.position = camPos;
+        Bounds cameraBounds = Camera.main.GetOrthographicBoundsWithOffset(0.1f);
+        bounds.center = transform.position = cameraBounds.center;
+
+        for (int j = 0; j < threadCells.Length; j++)
+        {
+            threadCells[j].UpdateBounds(cameraBounds);
+        }
     }
 
     public void SyncThreads()
