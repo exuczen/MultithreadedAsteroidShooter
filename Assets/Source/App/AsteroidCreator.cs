@@ -17,6 +17,9 @@ public class AsteroidCreator : MonoBehaviour
     private Transform asteroidContainer;
 
     [SerializeField]
+    private Transform asteroidPool;
+
+    [SerializeField]
     private Transform explosionContainer;
 
     [SerializeField]
@@ -40,6 +43,8 @@ public class AsteroidCreator : MonoBehaviour
     private const float linearVelocityMax = 6f;
 
     private const float linearVelocityMin = 2f;
+
+    private const int asteroidPoolCapacity = 30;
 
     private int collCellSize;
 
@@ -75,25 +80,63 @@ public class AsteroidCreator : MonoBehaviour
     {
     }
 
-    public void DestroyAsteroidGameObjectsOutOfView()
+    public void RemoveAsteroidGameObjectsOutOfView()
     {
         List<Asteroid> list = new List<Asteroid>();
         //asteroidContainer.GetComponentsInChildren(true, list);
-        for (int i = 0; i < asteroidContainer.childCount; i++)
+        foreach (Transform child in asteroidContainer)
         {
-            list.Add(asteroidContainer.GetChild(i).GetComponent<Asteroid>());
+            list.Add(child.GetComponent<Asteroid>());
         }
         List<Asteroid> outOfViewList = list.FindAll(asteroid => !asteroid.RawAsteroid.isInCameraView);
         foreach (Asteroid asteroid in outOfViewList)
         {
-            asteroid.RawAsteroid.DestroyGameObject();
+            asteroid.RawAsteroid.RemoveGameObject();
         }
     }
 
-    public Asteroid CreateAsteroidGameObject(RawAsteroid rawAsteroid)
+    public GameObject PickAsteroidGameObjectFromPool(RawAsteroid rawAsteroid)
+    {
+        int lastIndex = asteroidPool.childCount - 1;
+        if (lastIndex >= 0)
+        {
+            Transform transform = asteroidPool.GetChild(lastIndex);
+            transform.GetComponent<Asteroid>().RawAsteroid = rawAsteroid;
+            transform.gameObject.SetActive(true);
+            transform.SetParent(asteroidContainer);
+            transform.position = rawAsteroid.Position;
+            transform.rotation = rawAsteroid.Rotation;
+            return transform.gameObject;
+        }
+        else
+            return CreateAsteroidGameObject(rawAsteroid, asteroidContainer).gameObject;
+
+    }
+
+    public void ReturnAsteroidGameObjectToPool(Transform asteroid)
+    {
+        if (asteroidPool.childCount < asteroidPoolCapacity)
+        {
+            asteroid.SetParent(asteroidPool, false);
+            asteroid.gameObject.SetActive(false);
+        }
+        else
+        {
+            GameObject.Destroy(asteroid.gameObject);
+        }
+    }
+
+    private Asteroid CreateAsteroidGameObject(Transform parent)
     {
         Asteroid asteroidPrefab = AppManager.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
-        return asteroidPrefab.CreateInstance(this, asteroidContainer, rawAsteroid);
+        return asteroidPrefab.CreateInstance(this, parent);
+    }
+
+    private Asteroid CreateAsteroidGameObject(RawAsteroid rawAsteroid, Transform parent)
+    {
+        //Debug.LogWarning(GetType() + ".CreateAsteroidGameObject");
+        Asteroid asteroidPrefab = AppManager.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
+        return asteroidPrefab.CreateInstance(this, parent, rawAsteroid);
     }
 
     public void CreateAsteroids()
@@ -108,7 +151,12 @@ public class AsteroidCreator : MonoBehaviour
         //prefabRigidBody.simulated = true;
         //prefabCollider.enabled = true;
         //Destroy(prefabRigidBody);
-        //Destroy(prefabColliders);
+        //Destroy(prefabCollider);
+
+        for (int i = 0; i < asteroidPoolCapacity; i++)
+        {
+            CreateAsteroidGameObject(asteroidPool);
+        }
 
         Vector2 cellSize = spawnGrid.cellSize;
         Vector3Int cellPosition = Vector3Int.zero;
@@ -123,7 +171,6 @@ public class AsteroidCreator : MonoBehaviour
                 Vector3 asteroidPos = spawnGrid.GetCellCenterWorld(cellPosition);
                 RawAsteroid rawAsteroid = new RawAsteroid(this, asteroidPos, asteroidEuler, asteroidBounds, 0.65f);
                 rawAsteroid.SetRandomVelocities(linearVelocityMin, linearVelocityMax, angularVelocityMin, angularVelocityMax);
-                //rawAsteroid.CreateGameObject();
                 rawAsteroids.Add(rawAsteroid);
             }
         }
@@ -136,7 +183,7 @@ public class AsteroidCreator : MonoBehaviour
             for (int x = -halfXCountInView; x < halfXCountInView; x++)
             {
                 int index = yIndex + halfXYCount + x;
-                rawAsteroids[index].CreateGameObject();
+                rawAsteroids[index].SetGameObject();
             }
         }
 
@@ -183,6 +230,8 @@ public class AsteroidCreator : MonoBehaviour
     public void Clear()
     {
         rawAsteroids.Clear();
+
+        asteroidPool.DestroyAllChildren();
 
         asteroidContainer.DestroyAllChildren();
 

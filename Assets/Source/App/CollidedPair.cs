@@ -19,7 +19,7 @@ public struct CollidedPair
         {
             bodyA.Explode(midPt);
         }
-        bodyA.DestroyGameObject();
-        bodyB.DestroyGameObject();
+        bodyA.RemoveGameObject();
+        bodyB.RemoveGameObject();
     }
 }

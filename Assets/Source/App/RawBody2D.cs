@@ -106,7 +106,7 @@ public abstract class RawBody2D
     public void SetGameObjectData()
     {
         if (!transform)
-            CreateGameObject();
+            SetGameObject();
 
         transform.position = position;
         transform.eulerAngles = eulerAngles;
@@ -127,11 +127,11 @@ public abstract class RawBody2D
         spriteColor = c;
     }
 
-    public void DestroyGameObject()
+    public void RemoveGameObject()
     {
         if (transform)
         {
-            GameObject.Destroy(transform.gameObject);
+            RemoveGameObjectInstance();
         }
         transform = null;
         spriteRenderer = null;
@@ -142,11 +142,9 @@ public abstract class RawBody2D
         isInCameraView = false;
     }
 
-    protected abstract GameObject CreateGameObjectInstance();
-
-    public void CreateGameObject()
+    public void SetGameObject()
     {
-        GameObject gameObject = CreateGameObjectInstance();
+        GameObject gameObject = GetGameObjectInstance();
         transform = gameObject.transform;
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 #if DEBUG_RIGID_BODY
@@ -154,6 +152,10 @@ public abstract class RawBody2D
         collider = transform.GetComponent<Collider2D>();
 #endif
     }
+
+    protected abstract void RemoveGameObjectInstance();
+
+    protected abstract GameObject GetGameObjectInstance();
 
     public abstract void Explode(Vector2 explosionPos);
 

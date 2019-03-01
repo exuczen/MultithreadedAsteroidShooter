@@ -56,10 +56,14 @@ public class RawAsteroid : RawBody2D
         creator.StartExplosion(explosionPos);
     }
 
-    protected override GameObject CreateGameObjectInstance()
+    protected override GameObject GetGameObjectInstance()
     {
-        Asteroid asteroid = creator.CreateAsteroidGameObject(this);
-        return asteroid.gameObject;
+        return creator.PickAsteroidGameObjectFromPool(this);
+    }
+
+    protected override void RemoveGameObjectInstance()
+    {
+        creator.ReturnAsteroidGameObjectToPool(transform);
     }
 }
 

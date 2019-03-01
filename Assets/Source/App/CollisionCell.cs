@@ -5,8 +5,9 @@ using DC;
 
 public class CollisionCell : CustomCell
 {
+#if DEBUG_RIGID_BODY
     public const int CollisionLayer = Const.LayerAsteroid;
-
+#endif
     public const int DefaultLayer = Const.LayerDefault;
 
     private static int colorIndex = 0;

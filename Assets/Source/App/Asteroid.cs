@@ -8,8 +8,17 @@ public class Asteroid : MonoBehaviour
 
     private RawAsteroid rawAsteroid;
 
-    public RawAsteroid RawAsteroid { get => rawAsteroid; }
-    
+    public RawAsteroid RawAsteroid { get => rawAsteroid; set { rawAsteroid = value; } }
+
+    public Asteroid CreateInstance(AsteroidCreator creator, Transform parent)
+    {
+        Asteroid asteroid = Instantiate(this, parent, false);
+        asteroid.gameObject.SetActive(false);
+        asteroid.rawAsteroid = null;
+        asteroid.creator = creator;
+        return asteroid;
+    }
+
     public Asteroid CreateInstance(AsteroidCreator creator, Transform parent, RawAsteroid rawAsteroid)
     {
         Asteroid asteroid = Instantiate(this, rawAsteroid.Position, rawAsteroid.Rotation, parent);
@@ -23,7 +32,7 @@ public class Asteroid : MonoBehaviour
     {
         //Debug.Log(GetType() + ".OnTriggerEnter: " + collider);
         creator.AddAsteroidToRespawn(rawAsteroid);
-        rawAsteroid.DestroyGameObject();
+        rawAsteroid.RemoveGameObject();
         if (transform.position.IsInCameraView(Camera.main, 0.1f, 0.1f))
         {
             rawAsteroid.Explode(transform.position);

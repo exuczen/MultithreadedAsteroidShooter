@@ -66,9 +66,9 @@ public class AppManager : Singleton<AppManager>
             asteroidCreator.AddAsteroidsToRespawnInThreadCells(threadGrid);
 #if DEBUG_GAME_OBJECTS
             if (!debugGameObjects)
-                asteroidCreator.DestroyAsteroidGameObjectsOutOfView();
+                asteroidCreator.RemoveAsteroidGameObjectsOutOfView();
 #else
-            asteroidCreator.DestroyAsteroidGameObjectsOutOfView();
+            asteroidCreator.RemoveAsteroidGameObjectsOutOfView();
 #endif
             threadGrid.UpdateBounds();
             threadGrid.SyncThreads();
