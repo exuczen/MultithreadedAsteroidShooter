@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DEBUG_GAME_OBJECT
+
+using System;
 using UnityEngine;
 
 public abstract class RawBody2D
@@ -14,9 +16,11 @@ public abstract class RawBody2D
     private float angularVelocity;
 
     protected Transform transform;
+#if DEBUG_GAME_OBJECT
     private SpriteRenderer spriteRenderer;
     protected Rigidbody2D rigidBody;
     protected Collider2D collider;
+#endif
 
     protected Bounds2 bounds;
     private Vector2Int sizeInt;
@@ -110,6 +114,7 @@ public abstract class RawBody2D
 
         transform.position = position;
         transform.eulerAngles = eulerAngles;
+#if DEBUG_GAME_OBJECT
         spriteRenderer.color = spriteColor;
         if (layer != transform.gameObject.layer)
         {
@@ -118,6 +123,7 @@ public abstract class RawBody2D
             rigidBody.simulated = collisionLayer;
             collider.enabled = collisionLayer;
         }
+#endif
     }
 
     public void SetSpriteColor(Color c)
@@ -132,9 +138,11 @@ public abstract class RawBody2D
             GameObject.Destroy(transform.gameObject);
         }
         transform = null;
+#if DEBUG_GAME_OBJECT
         spriteRenderer = null;
         rigidBody = null;
         collider = null;
+#endif
         isInCameraView = false;
     }
 
@@ -144,9 +152,11 @@ public abstract class RawBody2D
     {
         GameObject gameObject = CreateGameObjectInstance();
         transform = gameObject.transform;
+#if DEBUG_GAME_OBJECT
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         rigidBody = transform.GetComponent<Rigidbody2D>();
         collider = transform.GetComponent<Collider2D>();
+#endif
     }
 
     public abstract void Explode(Vector2 explosionPos);

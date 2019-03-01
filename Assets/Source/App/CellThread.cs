@@ -82,11 +82,18 @@ public class CellThread : SyncedThread
 
     public override void SyncThread()
     {
+#if DEBUG_GAME_OBJECTS
+        for (int i = 0; i < bodies.Count; i++)
+        {
+            bodies[i].SetGameObjectData();
+        }
+#else
         collGrid.GetBodiesInCameraView(out List<RawBody2D> bodiesInCameraView);
         for (int i = 0; i < bodiesInCameraView.Count; i++)
         {
             bodiesInCameraView[i].SetGameObjectData();
         }
+#endif
         running = cell.enabled && cell.gameObject.activeInHierarchy;
         //for (int i = 0; i < collGrid.Cells.Length; i++)
         //{
