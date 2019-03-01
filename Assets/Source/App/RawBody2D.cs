@@ -1,6 +1,4 @@
-﻿//#define DEBUG_GAME_OBJECT
-
-using System;
+﻿using System;
 using UnityEngine;
 
 public abstract class RawBody2D
@@ -16,10 +14,11 @@ public abstract class RawBody2D
     private float angularVelocity;
 
     protected Transform transform;
-#if DEBUG_GAME_OBJECT
     private SpriteRenderer spriteRenderer;
+#if DEBUG_RIGID_BODY
     protected Rigidbody2D rigidBody;
     protected Collider2D collider;
+    protected int layer;
 #endif
 
     protected Bounds2 bounds;
@@ -28,19 +27,23 @@ public abstract class RawBody2D
     private int radiusInt;
     private Color spriteColor;
     protected float respawnTime;
-    protected int layer;
+    
 
     public Bounds2 Bounds { get => bounds; }
     public float RespawnTime { get => respawnTime; set => respawnTime = value; }
-    public int Layer { get => layer; set { layer = value; } }
     public Quaternion Rotation { get => Quaternion.Euler(eulerAngles); }
+#if DEBUG_RIGID_BODY
+    public int Layer { get => layer; set { layer = value; } }
+#endif
 
     public RawBody2D(Vector2 position, Vector3 eulerAngles, Bounds2 bounds, float radius)
     {
         this.position = position;
         this.eulerAngles = eulerAngles;
-        layer = Const.LayerDefault;
+        threadCellIndex = -1;
+        collCellIndex = -1;
         isInCameraView = false;
+        spriteColor = Color.black;
         SetSizeData(bounds, radius);
     }
 
@@ -55,13 +58,6 @@ public abstract class RawBody2D
     }
 
     public Vector2Int PositionInt { get => positionInt; }
-
-    public void ResetData()
-    {
-        spriteColor = Color.black;
-        threadCellIndex = -1;
-        collCellIndex = -1;
-    }
 
     public void SetVelocities(Vector2 velocity, float angularVelocity)
     {
@@ -114,8 +110,8 @@ public abstract class RawBody2D
 
         transform.position = position;
         transform.eulerAngles = eulerAngles;
-#if DEBUG_GAME_OBJECT
         spriteRenderer.color = spriteColor;
+#if DEBUG_RIGID_BODY
         if (layer != transform.gameObject.layer)
         {
             transform.gameObject.layer = layer;
@@ -138,8 +134,8 @@ public abstract class RawBody2D
             GameObject.Destroy(transform.gameObject);
         }
         transform = null;
-#if DEBUG_GAME_OBJECT
         spriteRenderer = null;
+#if DEBUG_RIGID_BODY
         rigidBody = null;
         collider = null;
 #endif
@@ -152,8 +148,8 @@ public abstract class RawBody2D
     {
         GameObject gameObject = CreateGameObjectInstance();
         transform = gameObject.transform;
-#if DEBUG_GAME_OBJECT
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+#if DEBUG_RIGID_BODY
         rigidBody = transform.GetComponent<Rigidbody2D>();
         collider = transform.GetComponent<Collider2D>();
 #endif

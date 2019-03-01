@@ -92,13 +92,13 @@ public class AsteroidCreator : MonoBehaviour
 
     public Asteroid CreateAsteroidGameObject(RawAsteroid rawAsteroid)
     {
-        Asteroid asteroidPrefab = Const.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
+        Asteroid asteroidPrefab = AppManager.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
         return asteroidPrefab.CreateInstance(this, asteroidContainer, rawAsteroid);
     }
 
     public void CreateAsteroids()
     {
-        Asteroid asteroidPrefab = Const.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
+        Asteroid asteroidPrefab = AppManager.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
         asteroidPrefab.gameObject.SetActive(true);
         asteroidPrefab.gameObject.layer = Const.LayerDefault;
         Rigidbody2D prefabRigidBody = asteroidPrefab.GetComponent<Rigidbody2D>();

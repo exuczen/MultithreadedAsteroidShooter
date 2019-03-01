@@ -5,6 +5,12 @@ using DC;
 public class AppManager : Singleton<AppManager>
 {
     [SerializeField]
+    private bool debugGameObjects;
+
+    [SerializeField]
+    private bool debugSprites;
+
+    [SerializeField]
     private DebugPanel debugPanel;
 
     [SerializeField]
@@ -27,6 +33,10 @@ public class AppManager : Singleton<AppManager>
     private bool stopRequested;
 
     private Player player;
+
+    public static bool DebugGameObjects { get => instance.debugGameObjects; }
+
+    public static bool DebugSprites { get => instance.debugSprites; }
 
     public ThreadGrid ThreadGrid { get => threadGrid; }
 
@@ -54,7 +64,10 @@ public class AppManager : Singleton<AppManager>
             threadGrid.PreSyncThreads();
 
             asteroidCreator.AddAsteroidsToRespawnInThreadCells(threadGrid);
-#if !DEBUG_GAME_OBJECTS
+#if DEBUG_GAME_OBJECTS
+            if (!debugGameObjects)
+                asteroidCreator.DestroyAsteroidGameObjectsOutOfView();
+#else
             asteroidCreator.DestroyAsteroidGameObjectsOutOfView();
 #endif
             threadGrid.UpdateBounds();

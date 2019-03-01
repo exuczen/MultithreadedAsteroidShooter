@@ -68,9 +68,11 @@ public class CollisionCell : CustomCell
     public void AddBody(RawBody2D body)
     {
         //Debug.LogWarning(GetType() + ".AddBody: cellIndex=" + index + " color=" + color + " isMiddle=" + isMiddle);
-        body.SetSpriteColor(Const.DebugSprites ? color : Color.white);
+        body.SetSpriteColor(AppManager.DebugSprites ? color : Color.white);
         body.collCellIndex = index;
+#if DEBUG_RIGID_BODY
         body.Layer = isMiddle ? CollisionLayer : DefaultLayer;
+#endif
         bodies.Add(body);
     }
 
