@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RawPhysics;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CollisionGrid : CustomGrid
@@ -17,12 +18,13 @@ public class CollisionGrid : CustomGrid
 
     public CollisionCell[] Cells { get => cells; }
 
-    public CollisionGrid CreateInstance(CustomCell parentCell, CollisionCell collCellPrefab, int cellSize)
+    public CollisionGrid CreateInstance(CustomCell parentCell, CollisionCell collCellPrefab, float cellSize)
     {
         Bounds2 bounds = parentCell.Bounds;
         //Debug.Log(GetType() + ".CollisionGrid: " + bounds.center + " " + bounds.size + " " + cellSize + " " + parentCell.MiddleAnchor);
-        int xCount = Mathf.Max(1, (int)(bounds.Size.x / cellSize));
-        int yCount = Mathf.Max(1, (int)(bounds.Size.y / cellSize));
+        float eps = 0.0001f;
+        int xCount = Mathf.Max(1, (int)((bounds.Size.x + eps) / cellSize));
+        int yCount = Mathf.Max(1, (int)((bounds.Size.y + eps) / cellSize));
         Vector2Int xyCount = new Vector2Int(xCount, yCount);
         CollisionGrid grid = CreateInstance<CollisionGrid>(parentCell.transform, bounds, xyCount);
         grid.cells = new CollisionCell[xCount * yCount];

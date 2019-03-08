@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DC;
+using RawPhysics;
 
 public class ThreadGrid : CustomGrid
 {
@@ -25,39 +26,48 @@ public class ThreadGrid : CustomGrid
         enabled = false;
     }
 
-    public void AddAsteroidsToThreadCells(AsteroidCreator asteroidCreator)
+    public void CreateThreadCells(Vector2 gridSize, float collCellSize)
     {
-        //Debug.Log(GetType() + ".AddAsteroidsToThreadCells: SystemInfo.processorCount=" + SystemInfo.processorCount);
-        int threadsCount = SystemInfo.processorCount;
-        //threadsCount = 4;
-
-        int xCount; // cols count
-        int yCount; // rows count
-
-        if (threadsCount > 1)
+        bool middleAnchor = true;
+        //bool middleAnchor = false;
+        int threadsCount;
+        int xCount, yCount;
+        if (middleAnchor)
         {
-            yCount = Mathf.FloorToInt(Mathf.Sqrt(threadsCount));
-            xCount = threadsCount / yCount;
+            threadsCount = 9;
+            xCount = 3; // cols count
+            yCount = 3; // rows count
+            collCellSize = gridSize.x / 15;
+            //collCellSize = gridSize.x / 9;
         }
         else
         {
-            xCount = yCount = 1;
-        }
-        Vector2 size = asteroidCreator.SpawnGridSize;
-        if ((size.x > size.y && xCount < yCount) || (size.x < size.y && xCount > yCount))
-        {
-            int tmp = xCount;
-            xCount = yCount;
-            yCount = tmp;
+            threadsCount = SystemInfo.processorCount;
+            if (threadsCount > 1)
+            {
+                yCount = Mathf.FloorToInt(Mathf.Sqrt(threadsCount));
+                xCount = threadsCount / yCount;
+            }
+            else
+            {
+                xCount = yCount = 1;
+            }
+            Vector2 size = gridSize;
+            if ((size.x > size.y && xCount < yCount) || (size.x < size.y && xCount > yCount))
+            {
+                int tmp = xCount;
+                xCount = yCount;
+                yCount = tmp;
+            }
         }
         //Debug.Log(GetType() + ".AddAsteroidsToThreadCells: " + threadsCount + " " + xCount + " " + yCount);
-        SetParams(size, new Vector2Int(xCount, yCount));
+        SetParams(gridSize, new Vector2Int(xCount, yCount));
         bounds.Center = transform.position = (Vector2)Camera.main.transform.position;
         //return;
+        threadCellPrefab.gameObject.SetActive(true);
         threadCells = new ThreadCell[threadsCount];
         cellThreadHandles = new EventWaitHandle[threadsCount];
 
-        int collCellSize = asteroidCreator.CollCellSize;
         for (int y = 0; y < yCount; y++)
         {
             for (int x = 0; x < xCount; x++)
@@ -69,13 +79,28 @@ public class ThreadGrid : CustomGrid
                 threadCells[cellIndex] = cell;
             }
         }
-        List<RawAsteroid> asteroids = asteroidCreator.RawAsteroids;
 
+        //threadCellPrefab.gameObject.SetActive(false);
+        //EventWaitHandle[] tempHandles = new EventWaitHandle[threadsCount - 1];
+        //for (int i = 0; i < tempHandles.Length; i++)
+        //{
+        //    tempHandles[i] = cellThreadHandles[i];
+        //}
+        //cellThreadHandles = tempHandles;
+        //ThreadCell[] tempCells = new ThreadCell[threadsCount - 1];
+        //for (int i = 0; i < tempCells.Length; i++)
+        //{
+        //    tempCells[i] = threadCells[i];
+        //}
+        //threadCells = tempCells;
+    }
+
+    public void AddAsteroidsToThreadCells(List<RawAsteroid> asteroids)
+    {
         for (int i = 0; i < asteroids.Count; i++)
         {
             AddBodyToThreadCell(asteroids[i]);
         }
-        threadCellPrefab.gameObject.SetActive(false);
     }
 
     public void WaitForAllThreads()
@@ -91,9 +116,10 @@ public class ThreadGrid : CustomGrid
         }
     }
 
-    public void UpdateBounds()
+    public void UpdateBounds(Vector2 dr)
     {
         Bounds2 cameraBounds = Camera.main.GetOrthographicBounds2WithOffset(0.1f);
+        cameraBounds.Center += dr;
         bounds.Center = transform.position = cameraBounds.Center;
 
         for (int j = 0; j < threadCells.Length; j++)
@@ -146,12 +172,6 @@ public class ThreadGrid : CustomGrid
         {
             threadCells[j].SyncStopRequest();
         }
-    }
-
-    public void AddBodyToRespawnInThreadCell(RawBody2D body)
-    {
-        int cellIndex = GetCellIndex(body.Position);
-        threadCells[cellIndex].AddBodyToRespawn(body);
     }
 
     public void AddBodyToThreadCell(RawBody2D body)

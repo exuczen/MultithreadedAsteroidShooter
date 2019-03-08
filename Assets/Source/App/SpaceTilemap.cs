@@ -74,7 +74,7 @@ public class SpaceTilemap : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         Vector3Int camPrevTilePos = cameraTilePosition;
         Vector3Int camCurrTilePos = tilemap.WorldToCell(camera.transform.position);

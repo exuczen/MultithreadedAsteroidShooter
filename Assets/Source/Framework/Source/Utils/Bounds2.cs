@@ -82,6 +82,11 @@ public struct Bounds2 : IEquatable<Bounds2>
         return center == other.center && size == other.size;
     }
 
+    public override string ToString()
+    {
+        return "center:" + center + " extents:" + extents;
+    }
+
     public static Bounds2 BoundsToBounds2(Bounds bounds)
     {
         return new Bounds2(bounds.center, bounds.size);

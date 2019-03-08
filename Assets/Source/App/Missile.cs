@@ -1,18 +1,45 @@
-﻿using System.Collections;
+﻿using RawPhysics;
+using System.Collections;
 using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
-    private IEnumerator Start()
+    private RawMissile rawMissile;
+
+    public RawMissile RawMissile { get => rawMissile; set => rawMissile = value; }
+
+    public Missile CreateInstance(Transform parent, RawMissile rawMissile)
     {
-        yield return new WaitForSeconds(3);
-        Destroy(gameObject);
+        Missile missile = Instantiate(this, rawMissile.Position, rawMissile.Rotation, parent);
+        missile.transform.localScale  = transform.lossyScale;
+        missile.RawMissile = rawMissile;
+        missile.gameObject.SetActive(true);
+        return missile;
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    //private void OnTriggerEnter2D(Collider2D collider)
+    //{
+    //}
+}
+
+public class RawMissile : RawBody2D
+{
+    private Spaceship spaceship;
+
+    public RawMissile(Spaceship spaceship, Vector2 position, Vector3 eulerAngles, Bounds2 bounds) : base(position, eulerAngles, bounds)
     {
-        //Debug.Log(GetType() + ".OnTriggerEnter: " + collider);
-        AppManager.Instance.AddPlayerPoints(Const.PlayerPointsForAsteroid);
-        Destroy(gameObject);
+        this.spaceship = spaceship;
+    }
+
+    protected override GameObject GetGameObjectInstance(out SpriteRenderer spriteRenderer)
+    {
+        GameObject gameObject = spaceship.CreateMissileGameObject(this);
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        return gameObject;
+    }
+
+    protected override void RemoveGameObjectInstance()
+    {
+        spaceship.DestroyMissileGameObject(transform);
     }
 }

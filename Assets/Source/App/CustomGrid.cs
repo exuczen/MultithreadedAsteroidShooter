@@ -52,17 +52,10 @@ public class CustomGrid : MonoBehaviour
     {
         float rayX = position.x - bounds.Min.x;
         float rayY = position.y - bounds.Min.y;
-        int cellX = (int)(rayX / cellSize.x);
-        int cellY = (int)(rayY / cellSize.y);
-        if (cellX >= 0 && cellX < xyCount.x && cellY >= 0 && cellY < xyCount.y)
-        {
-            return cellY * xyCount.x + cellX;
-        }
-        else
-        {
-            //Debug.LogWarning(GetType() + "." + " " + bottomLeft + " " + position + " " + rayX / cellSize.x + " " + rayY / cellSize.y);
-            //Debug.LogWarning(GetType() + ".GetCellIndex: " + " " + rayX + " " + rayY + " " + " " + cellSize.x + " " + cellSize.y + " " + cellX + " " + cellY);
-            return -1;
-        }
+        int cellX = Mathf.Clamp((int)(rayX / cellSize.x), 0, xyCount.x - 1);
+        int cellY = Mathf.Clamp((int)(rayY / cellSize.y), 0, xyCount.y - 1);
+        //Debug.LogWarning(GetType() + "." + " " + BottomLeft + " " + position + " " + rayX / cellSize.x + " " + rayY / cellSize.y);
+        //Debug.LogWarning(GetType() + ".GetCellIndex: " + " " + rayX + " " + rayY + " " + " " + cellSize.x + " " + cellSize.y + " " + cellX + " " + cellY);
+        return cellY * xyCount.x + cellX;
     }
 }

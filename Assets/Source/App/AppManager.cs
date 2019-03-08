@@ -11,6 +11,9 @@ public class AppManager : Singleton<AppManager>
     private bool debugSprites;
 
     [SerializeField]
+    private SpriteRenderer markerPrefab;
+
+    [SerializeField]
     private DebugPanel debugPanel;
 
     [SerializeField]
@@ -38,11 +41,21 @@ public class AppManager : Singleton<AppManager>
 
     public static bool DebugSprites { get => instance.debugSprites; }
 
-    public ThreadGrid ThreadGrid { get => threadGrid; }
+    public static SpriteRenderer MarkerPrefab { get => instance.markerPrefab; }
+
+    public static ThreadGrid ThreadGrid { get => instance.threadGrid; }
 
     public AsteroidCreator AsteroidCreator { get => asteroidCreator; }
 
     public MainPanel MainPanel { get => mainPanel; }
+
+    public static SpriteRenderer CreateMarker(Vector3 position, Transform parent, Color color)
+    {
+        SpriteRenderer marker = Instantiate(instance.markerPrefab, position, Quaternion.identity, parent);
+        marker.gameObject.SetActive(true);
+        marker.color = color;
+        return marker;
+    }
 
     protected override void OnAwake()
     {
@@ -63,15 +76,19 @@ public class AppManager : Singleton<AppManager>
             threadGrid.WaitForAllThreads();
             threadGrid.PreSyncThreads();
 
-            asteroidCreator.AddAsteroidsToRespawnInThreadCells(threadGrid);
-#if DEBUG_GAME_OBJECTS
             if (!debugGameObjects)
+            {
                 asteroidCreator.RemoveAsteroidGameObjectsOutOfView();
-#else
-            asteroidCreator.RemoveAsteroidGameObjectsOutOfView();
-#endif
-            threadGrid.UpdateBounds();
+                spaceship.RemoveMissileGameObjectsOutOfView();
+            }
+
             threadGrid.SyncThreads();
+
+            spaceship.UpdateSpaceship();
+            spaceship.UpdateShooting();
+            cameraDriver.FollowTarget(spaceship.transform);
+            threadGrid.UpdateBounds(spaceship.RawSpaceship.Velocity * Time.deltaTime);
+
             threadGrid.SyncStopRequest();
 
             if (!stopRequested)
@@ -85,17 +102,24 @@ public class AppManager : Singleton<AppManager>
         }
     }
 
+    private void LateUpdate()
+    {
+    }
+
     private void Start()
     {
+        asteroidCreator.RefreshCameraBounds();
         asteroidCreator.CreateAsteroids();
-        threadGrid.AddAsteroidsToThreadCells(asteroidCreator);
+        threadGrid.CreateThreadCells(asteroidCreator.SpawnGridSize, asteroidCreator.CollCellSize);
+        threadGrid.AddAsteroidsToThreadCells(asteroidCreator.RawAsteroids);
+        threadGrid.AddBodyToThreadCell(spaceship.RawSpaceship);
         threadGrid.StartThreads();
         stopRequested = false;
         running = true;
+
         debugPanel.SetDebugText(
-            "total asteroids: " + asteroidCreator.TotalAsteroidsCount
-            //+ "\nactive asteroids: " + asteroidCreator.GetActiveAsteroidsCount()
-            );
+            "total asteroids: " + asteroidCreator.RawAsteroids.Count
+        );
     }
 
     public void AddPlayerPoints(int points)
@@ -133,7 +157,8 @@ public class AppManager : Singleton<AppManager>
         asteroidCreator.Clear();
         yield return new WaitForEndOfFrame();
         player.ResetScore();
-        spaceship.Respawn();
+        spaceship.ResetSpaceship();
+        spaceship.DestroyMissiles();
         cameraDriver.ResetCameraPosition();
         Start();
     }

@@ -490,7 +490,7 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   scriptingDefineSymbols:
-    1: DEBUG_GAME_OBJECTS;DEBUG_RIGID_BODY
+    1: 
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using DC;
+using RawPhysics;
 
 public class AsteroidCreator : MonoBehaviour
 {
@@ -27,24 +28,27 @@ public class AsteroidCreator : MonoBehaviour
 
     private ThreadGrid threadGrid;
 
-    private List<RawAsteroid> asteroidsToRespawn = new List<RawAsteroid>();
-
     //private const int spawnGridHalfXYCount = 40;
+    //private const int spawnGridHalfXYCount = 60;
     private const int spawnGridHalfXYCount = 80;
     //private const int spawnGridHalfXYCount = 128;
     //private const int spawnGridHalfXYCount = 256;
 
     private const int spawnInCollCellCount = 10;
 
-    private const float angularVelocityMax = 360f;
+    private const float angularVelocityMax = 360f * Mathf.Deg2Rad;
 
-    private const float angularVelocityMin = 15f;
+    private const float angularVelocityMin = 15f * Mathf.Deg2Rad;
 
     private const float linearVelocityMax = 6f;
 
     private const float linearVelocityMin = 2f;
 
     private const int asteroidPoolCapacity = 30;
+
+    private float asteroidColliderRadius;
+
+    private float debugAsteroidColliderRadius;
 
     private int collCellSize;
 
@@ -58,7 +62,7 @@ public class AsteroidCreator : MonoBehaviour
 
     public Transform AsteroidContainer => asteroidContainer;
 
-    public int TotalAsteroidsCount => asteroidContainer.childCount;
+    public int AsteroidGameObjectsCount => asteroidContainer.childCount;
 
     public List<RawAsteroid> RawAsteroids => rawAsteroids;
 
@@ -66,18 +70,31 @@ public class AsteroidCreator : MonoBehaviour
 
     private void Awake()
     {
-        threadGrid = AppManager.Instance.ThreadGrid;
-
         int cellSize = (int)spawnGrid.cellSize.x;
         collCellSize = cellSize * spawnInCollCellCount;
         spawnGrid.cellSize = new Vector2(cellSize, cellSize);
         spawnGridSize = new Vector2(cellSize * spawnGridHalfXYCount * 2, cellSize * spawnGridHalfXYCount * 2);
 
         RefreshCameraBounds();
+
+        CircleCollider2D asteroidPrefabCollider = asteroidPrefab.GetComponent<CircleCollider2D>();
+        CircleCollider2D debugAsteroidPrefabCollider = debugAsteroidPrefab.GetComponent<CircleCollider2D>();
+
+        asteroidPrefabCollider.gameObject.layer = Const.LayerDefault;
+        asteroidPrefabCollider.enabled = false;
+        asteroidColliderRadius = asteroidPrefabCollider.radius * asteroidPrefabCollider.transform.localScale.x;
+
+        debugAsteroidPrefabCollider.gameObject.layer = Const.LayerDefault;
+        debugAsteroidPrefabCollider.enabled = false;
+        debugAsteroidColliderRadius = debugAsteroidPrefabCollider.radius * debugAsteroidPrefabCollider.transform.localScale.x;
+
+        Destroy(asteroidPrefabCollider);
+        Destroy(debugAsteroidPrefabCollider);
     }
 
     private void Start()
     {
+        threadGrid = AppManager.ThreadGrid;
     }
 
     public void RemoveAsteroidGameObjectsOutOfView()
@@ -141,17 +158,11 @@ public class AsteroidCreator : MonoBehaviour
 
     public void CreateAsteroids()
     {
-        Asteroid asteroidPrefab = AppManager.DebugSprites ? debugAsteroidPrefab : this.asteroidPrefab;
+        float asteroidColliderRadius = AppManager.DebugSprites ? debugAsteroidColliderRadius : this.asteroidColliderRadius;
+        RawCirclesCollision2D.basicDiameterSquared = 4f * asteroidColliderRadius * asteroidColliderRadius;
+
+        debugAsteroidPrefab.gameObject.SetActive(true);
         asteroidPrefab.gameObject.SetActive(true);
-        asteroidPrefab.gameObject.layer = Const.LayerDefault;
-        Rigidbody2D prefabRigidBody = asteroidPrefab.GetComponent<Rigidbody2D>();
-        Collider2D prefabCollider = asteroidPrefab.GetComponent<Collider2D>();
-        prefabRigidBody.simulated = false;
-        prefabCollider.enabled = false;
-        //prefabRigidBody.simulated = true;
-        //prefabCollider.enabled = true;
-        //Destroy(prefabRigidBody);
-        //Destroy(prefabCollider);
 
         for (int i = 0; i < asteroidPoolCapacity; i++)
         {
@@ -161,7 +172,10 @@ public class AsteroidCreator : MonoBehaviour
         Vector2 cellSize = spawnGrid.cellSize;
         Vector3Int cellPosition = Vector3Int.zero;
         Vector3 asteroidEuler = Vector3.zero;
-        Bounds2 asteroidBounds = Bounds2.BoundsToBounds2(asteroidPrefab.GetComponent<SpriteRenderer>().bounds);
+        //Bounds2 asteroidSpriteBounds = Bounds2.BoundsToBounds2(asteroidPrefab.GetComponent<SpriteRenderer>().bounds);
+        //float asteroidSpriteMaxDim = Mathf.Max(asteroidSpriteBounds.Size.x, asteroidSpriteBounds.Size.y);
+
+        Bounds2 asteroidBounds = new Bounds2(Vector2.zero, new Vector2(2 * asteroidColliderRadius, 2 * asteroidColliderRadius));
         int halfXYCount = spawnGridHalfXYCount;
         for (int y = -halfXYCount; y < halfXYCount; y++)
         {
@@ -169,7 +183,7 @@ public class AsteroidCreator : MonoBehaviour
             {
                 cellPosition.Set(x, y, 0);
                 Vector3 asteroidPos = spawnGrid.GetCellCenterWorld(cellPosition);
-                RawAsteroid rawAsteroid = new RawAsteroid(this, asteroidPos, asteroidEuler, asteroidBounds, 0.65f);
+                RawAsteroid rawAsteroid = new RawAsteroid(this, asteroidPos, asteroidEuler, asteroidBounds, asteroidColliderRadius);
                 rawAsteroid.SetRandomVelocities(linearVelocityMin, linearVelocityMax, angularVelocityMin, angularVelocityMax);
                 rawAsteroids.Add(rawAsteroid);
             }
@@ -177,6 +191,7 @@ public class AsteroidCreator : MonoBehaviour
         int xyCount = halfXYCount << 1;
         int halfXCountInView = Mathf.CeilToInt(cameraBounds.Extents.x / cellSize.x);
         int halfYCountInView = Mathf.CeilToInt(cameraBounds.Extents.y / cellSize.y);
+        //Debug.Log(GetType() + "."+halfXCountInView+" "+halfYCountInView);
         for (int y = -halfYCountInView; y < halfYCountInView; y++)
         {
             int yIndex = (halfXYCount + y) * xyCount;
@@ -187,25 +202,8 @@ public class AsteroidCreator : MonoBehaviour
             }
         }
 
-        prefabRigidBody.simulated = false;
-        prefabCollider.enabled = false;
-        this.debugAsteroidPrefab.gameObject.SetActive(false);
-        this.asteroidPrefab.gameObject.SetActive(false);
-    }
-
-    public void AddAsteroidsToRespawnInThreadCells(ThreadGrid threadGrid)
-    {
-        for (int i = 0; i < asteroidsToRespawn.Count; i++)
-        {
-            threadGrid.AddBodyToRespawnInThreadCell(asteroidsToRespawn[i]);
-        }
-        asteroidsToRespawn.Clear();
-    }
-
-    public void AddAsteroidToRespawn(RawAsteroid asteroid)
-    {
-        asteroid.RespawnTime = Time.time + Const.BodyRespawnInterval;
-        asteroidsToRespawn.Add(asteroid);
+        debugAsteroidPrefab.gameObject.SetActive(false);
+        asteroidPrefab.gameObject.SetActive(false);
     }
 
     public void RespawnAsteroid(RawAsteroid asteroid)
@@ -237,6 +235,5 @@ public class AsteroidCreator : MonoBehaviour
 
         explosionContainer.DestroyAllChildren();
 
-        asteroidsToRespawn.Clear();
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using DC;
+using System.Linq;
+using RawPhysics;
 
 public class CollisionCell : CustomCell
 {
-#if DEBUG_RIGID_BODY
-    public const int CollisionLayer = Const.LayerAsteroid;
-#endif
     public const int DefaultLayer = Const.LayerDefault;
 
     private static int colorIndex = 0;
@@ -18,13 +16,17 @@ public class CollisionCell : CustomCell
 
     private List<RawBody2D> bodiesInCameraView = new List<RawBody2D>();
 
+    private Dictionary<RawColliderShape2D, List<RawCollider2D>> collidersDict = new Dictionary<RawColliderShape2D, List<RawCollider2D>>();
+
+    private List<RawCircleCollider2D> circleColliders = new List<RawCircleCollider2D>(100);
+    private List<RawBoxCollider2D> boxColliders = new List<RawBoxCollider2D>();
+    private List<RawTriangleCollider2D> triangleColliders = new List<RawTriangleCollider2D>();
+
     private CollisionGrid collGrid;
 
     private Color color;
 
     public int BodyCount { get => bodies.Count; }
-
-    public List<RawBody2D> BodiesInCameraView { get => bodiesInCameraView; }
 
     public CollisionCell CreateInstance(CustomCell parentCell, CollisionGrid grid, Vector2Int cellXY, Color[] colors)
     {
@@ -34,28 +36,47 @@ public class CollisionCell : CustomCell
         int y = cellXY.y;
         int pCellX = parentCell.XY.x;
         int pCellY = parentCell.XY.y;
-        int pX = parentCell.XY.x - Math.Max(1, parentCell.Grid.XYCount.x >> 1) + 1;
-        int pY = parentCell.XY.y - Math.Max(1, parentCell.Grid.XYCount.y >> 1) + 1;
 
         CollisionCell cell = CreateInstance<CollisionCell>(grid, cellXY);
         cell.color = colors[(colorIndex++) % colors.Length];
         cell.collGrid = grid;
-        cell.isMiddle =
+        if (xCount % 2 == 1 && yCount % 2 == 1)
+        {
+            int midX = Math.Max(1, (xCount - 1) >> 1);
+            int midY = Math.Max(1, (yCount - 1) >> 1);
+            int midPX = Math.Max(1, (parentCell.Grid.XYCount.x - 1) >> 1);
+            int midPY = Math.Max(1, (parentCell.Grid.XYCount.y - 1) >> 1);
+            cell.isMiddle = pCellX == midPX && pCellY == midPY && x == midX && y == midY;
+            //Debug.LogWarning(GetType() + "." + midX + " " + midY + " " + " " + midPX + " " + midPY + " " + x + " " + y + " " + pCellX + " " + pCellY + " " + cell.isMiddle);
+        }
+        else if (xCount % 2 == 0 && yCount % 2 == 0)
+        {
+            int pX = parentCell.XY.x - Math.Max(1, parentCell.Grid.XYCount.x >> 1) + 1;
+            int pY = parentCell.XY.y - Math.Max(1, parentCell.Grid.XYCount.y >> 1) + 1;
+            cell.isMiddle =
             (pX == 0 && pY == 0 && x == xCount - 1 && y == yCount - 1) ||
             (pX == 1 && pY == 0 && x == 0 && y == yCount - 1) ||
             (pX == 0 && pY == 1 && x == xCount - 1 && y == 0) ||
             (pX == 1 && pY == 1 && x == 0 && y == 0);
+            //parentCell.IsMiddle = (pX == 0 && pY == 0) || (pX == 1 && pY == 0) || (pX == 0 && pY == 1) || (pX == 1 && pY == 1);
+        }
+        //Debug.LogWarning(GetType() + ".isMiddle=" + isMiddle);
         if (cell.isMiddle)
         {
             cell.GetComponent<SpriteRenderer>().color = Color.black;
             //cell.GetComponent<SpriteRenderer>().enabled = true;
         }
-        //parentCell.IsMiddle = (pX == 0 && pY == 0) || (pX == 1 && pY == 0) || (pX == 0 && pY == 1) || (pX == 1 && pY == 1);
         //if (parentCell.IsMiddle)
         //{
         //    parentCell.GetComponent<SpriteRenderer>().color = Color.black;
         //    //parentCell.GetComponent<SpriteRenderer>().enabled = true;
         //}
+
+        foreach (RawColliderShape2D shape in RawPhysics2D.ColliderShapes)
+        {
+            cell.collidersDict.Add(shape, new List<RawCollider2D>());
+        }
+
         return cell;
     }
 
@@ -71,18 +92,16 @@ public class CollisionCell : CustomCell
         //Debug.LogWarning(GetType() + ".AddBody: cellIndex=" + index + " color=" + color + " isMiddle=" + isMiddle);
         body.SetSpriteColor(AppManager.DebugSprites ? color : Color.white);
         body.collCellIndex = index;
-#if DEBUG_RIGID_BODY
-        body.Layer = isMiddle ? CollisionLayer : DefaultLayer;
-#endif
         bodies.Add(body);
     }
 
     public void AddBodiesInCameraView()
     {
-        if (isMiddle)
+        Bounds2 cameraBounds = collGrid.CameraBounds;
+        if (isMiddle || bounds.Size.y < cameraBounds.Size.y)
         {
             bodiesInCameraView.Clear();
-            Bounds2 cameraBounds = collGrid.CameraBounds;
+            //Debug.LogWarning(GetType() + "." + cameraBounds.Size);
             for (int i = 0; i < bodies.Count; i++)
             {
                 RawBody2D body = bodies[i];
@@ -118,29 +137,99 @@ public class CollisionCell : CustomCell
         bodiesOutOfBounds.Clear();
     }
 
-    public void UpdateCollisions()
+    private void UpdateCollisions<T, T1, T2>(List<T1> collidersA, List<T2> collidersB, Func<T1, T2, Vector2, bool> overlap)
+        where T : RawCollision2D<T1, T2> where T1 : RawCollider2D where T2 : RawCollider2D
     {
-        for (int i = 0; i < bodies.Count; i++)
+        for (int i = 0; i < collidersA.Count; i++)
         {
-            RawBody2D bodyA = bodies[i];
-            for (int j = i + 1; j < bodies.Count; j++)
+            T1 colliderA = collidersA[i];
+            RawBody2D bodyA = colliderA.Body;
+            //bodyA.SetSpriteColor(Color.white);
+
+            for (int j = 0; j < collidersB.Count; j++)
             {
-                RawBody2D bodyB = bodies[j];
-                if (bodyA.BoundsOverlap(bodyB, out int dx, out int dy) &&
-                    bodyA.RadiusOverlap(bodyB, dx, dy))
+                T2 colliderB = collidersB[j];
+                RawBody2D bodyB = colliderB.Body;
+                if (bodyA.BoundsOverlap(bodyB, out Vector2 bodiesRay) &&
+                    overlap(colliderA, colliderB, bodiesRay))
                 {
-                    collGrid.AddCollidedPair(bodies[i], bodies[j]);
+                    //bodyA.SetSpriteColor(Color.red);
+                    collGrid.AddCollidedPair(bodyA, bodyB);
                 }
             }
         }
     }
 
+    private void UpdateCollisions<T, T1>(List<T1> colliders, Func<T1, T1, Vector2, bool> overlap)
+        where T : RawCollision2D<T1, T1> where T1 : RawCollider2D
+    {
+        //Debug.LogWarning(GetType() + "." + colliders.Count + " " + colliders.Count * (colliders.Count - 1) / 2);
+        for (int i = 0; i < colliders.Count; i++)
+        {
+            T1 colliderA = colliders[i];
+            RawBody2D bodyA = colliderA.Body;
+            for (int j = i + 1; j < colliders.Count; j++)
+            {
+                T1 colliderB = colliders[j];
+                RawBody2D bodyB = colliderB.Body;
+                if (bodyA.BoundsOverlap(bodyB, out Vector2 bodiesRay) &&
+                    overlap(colliderA, colliderB, bodiesRay)
+                    )
+                {
+                    collGrid.AddCollidedPair(bodyA, bodyB);
+                }
+            }
+        }
+    }
+
+    private List<T> GetCollidersOfType<T>(RawColliderShape2D shape) where T : RawCollider2D
+    {
+        return collidersDict[shape].Cast<T>().ToList();
+
+        //List<RawCollider2D> rawColliders = collidersDict[shape];
+        //List<T> colliders = new List<T>();
+        //foreach (var rawCollider in rawColliders)
+        //{
+        //    colliders.Add(rawCollider as T);
+        //}
+        //return colliders;
+    }
+
+    public void UpdateCollisions()
+    {
+        circleColliders.Clear();
+        boxColliders.Clear();
+        triangleColliders.Clear();
+        foreach (var kvp in collidersDict)
+        {
+            kvp.Value.Clear();
+        }
+        for (int i = 0; i < bodies.Count; i++)
+        {
+            RawBody2D body = bodies[i];
+            collidersDict[body.ColliderShape].Add(body.Collider);
+        }
+        circleColliders = GetCollidersOfType<RawCircleCollider2D>(RawColliderShape2D.Circle);
+
+        UpdateCollisions<RawCirclesCollision2D, RawCircleCollider2D>(circleColliders, RawPhysics2D.CirclesWithBasicRadiusOverlap);
+
+        if (isMiddle)
+        {
+            triangleColliders = GetCollidersOfType<RawTriangleCollider2D>(RawColliderShape2D.Triangle);
+            boxColliders = GetCollidersOfType<RawBoxCollider2D>(RawColliderShape2D.Box);
+            //Debug.LogWarning(GetType() + "." + triangleColliders.Count);
+
+            UpdateCollisions<RawTriangleCircleCollision2D, RawTriangleCollider2D, RawCircleCollider2D>(triangleColliders, circleColliders, RawPhysics2D.TriangleCircleOverlap);
+            UpdateCollisions<RawBoxCircleCollision2D, RawBoxCollider2D, RawCircleCollider2D>(boxColliders, circleColliders, RawPhysics2D.BoxCircleOverlap);
+        }
+    }
+
     public void GetBodiesInCameraView(List<RawBody2D> list)
     {
-        if (isMiddle)
+        Bounds2 cameraBounds = collGrid.CameraBounds;
+        if (isMiddle || bounds.Size.y < cameraBounds.Size.y)
         {
             list.AddRange(bodiesInCameraView);
         }
     }
-
 }

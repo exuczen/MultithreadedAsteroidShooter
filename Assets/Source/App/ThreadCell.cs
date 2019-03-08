@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using RawPhysics;
+using System.Threading;
 using UnityEngine;
 
 public class ThreadCell : CustomCell
@@ -18,7 +19,7 @@ public class ThreadCell : CustomCell
         return cell;
     }
 
-    public void CreateCollisionGrid(int cellSize, CollisionGrid collGridPrefab, CollisionCell collCellPrefab)
+    public void CreateCollisionGrid(float cellSize, CollisionGrid collGridPrefab, CollisionCell collCellPrefab)
     {
         collGrid = thread.CollGrid = collGridPrefab.CreateInstance(this, collCellPrefab, cellSize);
     }
@@ -37,6 +38,7 @@ public class ThreadCell : CustomCell
     {
         bounds.Center = transform.position;
         this.cameraBounds = cameraBounds;
+        thread.UpdateBounds();
     }
 
     public void SyncThread()
@@ -52,11 +54,6 @@ public class ThreadCell : CustomCell
     public void SyncStopRequest()
     {
         thread.SyncStopRequest();
-    }
-
-    public void AddBodyToRespawn(RawBody2D body)
-    {
-        thread.AddBodyToRespawn(body);
     }
 
     public void AddBody(RawBody2D body)

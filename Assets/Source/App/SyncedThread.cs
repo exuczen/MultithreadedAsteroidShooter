@@ -15,7 +15,9 @@ public abstract class SyncedThread
 
     private float deltaTime;
 
-    protected abstract void UpdateThread(float deltaTime);
+    private float time;
+
+    protected abstract void UpdateThread(float time, float deltaTime);
 
     public abstract void PreSyncThread();
 
@@ -35,7 +37,7 @@ public abstract class SyncedThread
             childThreadHandle.Reset();
             //if (thread.Name.Equals("ThreadCell2"))
             //    Thread.Sleep(500);
-            UpdateThread(deltaTime);
+            UpdateThread(time, deltaTime);
             loopCounter++;
             WaitHandle.SignalAndWait(mainThreadHandle, childThreadHandle); //Signals one WaitHandle and waits on another.
         }
@@ -67,6 +69,7 @@ public abstract class SyncedThread
         mainThreadHandle.WaitOne();
         mainThreadHandle.Reset();
         loopCounter = 0;
+        time = Time.time;
         deltaTime = Time.deltaTime;
         childThreadHandle.Set();
     }

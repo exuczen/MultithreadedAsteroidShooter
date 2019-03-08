@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using DC;
+using RawPhysics;
 
 public struct CollidedPair
 {
@@ -14,10 +15,21 @@ public struct CollidedPair
 
     public void Destroy()
     {
-        Vector2 midPt = (bodyA.Position + bodyB.Position) / 2f;
-        if (midPt.IsInCameraView(Camera.main, 0.1f, 0.1f))
+        if (bodyA.Explosive && bodyB.Explosive)
         {
-            bodyA.Explode(midPt);
+            Vector2 midPt = (bodyA.Position + bodyB.Position) / 2f;
+            if (midPt.IsInCameraView(Camera.main, 0.1f, 0.1f))
+            {
+                bodyA.Explode(midPt);
+            }
+        }
+        else if (bodyA.Explosive)
+        {
+            bodyA.Explode(bodyA.Position);
+        }
+        else if (bodyB.Explosive)
+        {
+            bodyB.Explode(bodyB.Position);
         }
         bodyA.RemoveGameObject();
         bodyB.RemoveGameObject();
