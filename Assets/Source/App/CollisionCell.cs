@@ -18,8 +18,10 @@ public class CollisionCell : CustomCell
 
     private Dictionary<RawColliderShape2D, List<RawCollider2D>> collidersDict = new Dictionary<RawColliderShape2D, List<RawCollider2D>>();
 
-    private List<RawCircleCollider2D> circleColliders = new List<RawCircleCollider2D>(100);
+    private List<RawCircleCollider2D> circleColliders = new List<RawCircleCollider2D>();
+
     private List<RawBoxCollider2D> boxColliders = new List<RawBoxCollider2D>();
+
     private List<RawTriangleCollider2D> triangleColliders = new List<RawTriangleCollider2D>();
 
     private CollisionGrid collGrid;
@@ -137,8 +139,8 @@ public class CollisionCell : CustomCell
         bodiesOutOfBounds.Clear();
     }
 
-    private void UpdateCollisions<T, T1, T2>(List<T1> collidersA, List<T2> collidersB, Func<T1, T2, Vector2, bool> overlap)
-        where T : RawCollision2D<T1, T2> where T1 : RawCollider2D where T2 : RawCollider2D
+    private void UpdateCollisions<T1, T2>(List<T1> collidersA, List<T2> collidersB, Func<T1, T2, Vector2, bool> overlap)
+        where T1 : RawCollider2D where T2 : RawCollider2D
     {
         for (int i = 0; i < collidersA.Count; i++)
         {
@@ -160,8 +162,8 @@ public class CollisionCell : CustomCell
         }
     }
 
-    private void UpdateCollisions<T, T1>(List<T1> colliders, Func<T1, T1, Vector2, bool> overlap)
-        where T : RawCollision2D<T1, T1> where T1 : RawCollider2D
+    private void UpdateCollisions<T1>(List<T1> colliders, Func<T1, T1, Vector2, bool> overlap)
+        where T1 : RawCollider2D
     {
         //Debug.LogWarning(GetType() + "." + colliders.Count + " " + colliders.Count * (colliders.Count - 1) / 2);
         for (int i = 0; i < colliders.Count; i++)
@@ -211,7 +213,7 @@ public class CollisionCell : CustomCell
         }
         circleColliders = GetCollidersOfType<RawCircleCollider2D>(RawColliderShape2D.Circle);
 
-        UpdateCollisions<RawCirclesCollision2D, RawCircleCollider2D>(circleColliders, RawPhysics2D.CirclesWithBasicRadiusOverlap);
+        UpdateCollisions(circleColliders, RawPhysics2D.CirclesWithBasicRadiusOverlap);
 
         if (isMiddle)
         {
@@ -219,8 +221,8 @@ public class CollisionCell : CustomCell
             boxColliders = GetCollidersOfType<RawBoxCollider2D>(RawColliderShape2D.Box);
             //Debug.LogWarning(GetType() + "." + triangleColliders.Count);
 
-            UpdateCollisions<RawTriangleCircleCollision2D, RawTriangleCollider2D, RawCircleCollider2D>(triangleColliders, circleColliders, RawPhysics2D.TriangleCircleOverlap);
-            UpdateCollisions<RawBoxCircleCollision2D, RawBoxCollider2D, RawCircleCollider2D>(boxColliders, circleColliders, RawPhysics2D.BoxCircleOverlap);
+            UpdateCollisions(triangleColliders, circleColliders, RawPhysics2D.TriangleCircleOverlap);
+            UpdateCollisions(boxColliders, circleColliders, RawPhysics2D.BoxCircleOverlap);
         }
     }
 
