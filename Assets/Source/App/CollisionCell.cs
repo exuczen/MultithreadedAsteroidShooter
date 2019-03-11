@@ -44,10 +44,10 @@ public class CollisionCell : CustomCell
         cell.collGrid = grid;
         if (xCount % 2 == 1 && yCount % 2 == 1)
         {
-            int midX = Math.Max(1, (xCount - 1) >> 1);
-            int midY = Math.Max(1, (yCount - 1) >> 1);
-            int midPX = Math.Max(1, (parentCell.Grid.XYCount.x - 1) >> 1);
-            int midPY = Math.Max(1, (parentCell.Grid.XYCount.y - 1) >> 1);
+            int midX = Math.Max(0, (xCount - 1) >> 1);
+            int midY = Math.Max(0, (yCount - 1) >> 1);
+            int midPX = Math.Max(0, (parentCell.Grid.XYCount.x - 1) >> 1);
+            int midPY = Math.Max(0, (parentCell.Grid.XYCount.y - 1) >> 1);
             cell.isMiddle = pCellX == midPX && pCellY == midPY && x == midX && y == midY;
             //Debug.LogWarning(GetType() + "." + midX + " " + midY + " " + " " + midPX + " " + midPY + " " + x + " " + y + " " + pCellX + " " + pCellY + " " + cell.isMiddle);
         }

@@ -50,15 +50,11 @@ public class AsteroidCreator : MonoBehaviour
 
     private float debugAsteroidColliderRadius;
 
-    private int collCellSize;
-
     private Vector2 spawnGridSize;
 
     private List<RawAsteroid> rawAsteroids = new List<RawAsteroid>();
 
     public Vector2 SpawnGridSize => spawnGridSize;
-
-    public int CollCellSize => collCellSize;
 
     public Transform AsteroidContainer => asteroidContainer;
 
@@ -71,7 +67,6 @@ public class AsteroidCreator : MonoBehaviour
     private void Awake()
     {
         int cellSize = (int)spawnGrid.cellSize.x;
-        collCellSize = cellSize * spawnInCollCellCount;
         spawnGrid.cellSize = new Vector2(cellSize, cellSize);
         spawnGridSize = new Vector2(cellSize * spawnGridHalfXYCount * 2, cellSize * spawnGridHalfXYCount * 2);
 
