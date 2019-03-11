@@ -197,7 +197,7 @@ public class CollisionCell : CustomCell
         //return colliders;
     }
 
-    public void UpdateCollisions()
+    private void ClearColliders()
     {
         circleColliders.Clear();
         boxColliders.Clear();
@@ -206,6 +206,11 @@ public class CollisionCell : CustomCell
         {
             kvp.Value.Clear();
         }
+    }
+
+    public void UpdateCollisions()
+    {
+        ClearColliders();
         for (int i = 0; i < bodies.Count; i++)
         {
             RawBody2D body = bodies[i];
@@ -233,5 +238,13 @@ public class CollisionCell : CustomCell
         {
             list.AddRange(bodiesInCameraView);
         }
+    }
+
+    public void Clear()
+    {
+        bodies.Clear();
+        bodiesOutOfBounds.Clear();
+        bodiesInCameraView.Clear();
+        ClearColliders();
     }
 }

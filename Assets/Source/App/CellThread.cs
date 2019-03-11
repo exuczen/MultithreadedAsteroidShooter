@@ -212,13 +212,12 @@ public class CellThread : SyncedThread
         }
     }
 
-    //public void ClearThreadData()
-    //{
-    //    bodies.Clear();
-    //    bodiesOutOfBounds.Clear();
-    //    bodiesToRespawn.Clear();
-    //    grid = null;
-    //    cell = null;
-    //    collGrid = null;
-    //}
+    public void Clear()
+    {
+        bodies.Clear();
+        bodiesOutOfBounds.Clear();
+        bodiesOutOfTime.Clear();
+        bodiesToRespawn.Clear();
+        collGrid.Clear();
+    }
 }

@@ -56,10 +56,17 @@ public abstract class SyncedThread
 
     public void StartThread()
     {
-        running = true;
-        stopRequested = false;
-        childThread = new Thread(ChildThreadLoop);
-        childThread.Start();
+        if (childThread == null)
+        {
+            running = true;
+            stopRequested = false;
+            childThread = new Thread(ChildThreadLoop);
+            childThread.Start();
+        }
+        else
+        {
+            ResumeThread();
+        }
     }
 
     public void ResumeThread()

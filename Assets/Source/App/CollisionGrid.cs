@@ -106,4 +106,13 @@ public class CollisionGrid : CustomGrid
             cells[i].GetBodiesInCameraView(list);
         }
     }
+
+    public void Clear()
+    {
+        collidedPairs.Clear();
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].Clear();
+        }
+    }
 }

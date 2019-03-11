@@ -66,9 +66,8 @@ public class ThreadCell : CustomCell
         thread.ResumeThread();
     }
 
-    //public void ClearThreadData()
-    //{
-    //    thread.ClearThreadData();
-    //}
-
+    public void Clear()
+    {
+        thread.Clear();
+    }
 }

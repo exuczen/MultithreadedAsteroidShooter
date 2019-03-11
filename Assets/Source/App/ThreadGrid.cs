@@ -19,7 +19,7 @@ public class ThreadGrid : CustomGrid
 
     private EventWaitHandle[] cellThreadHandles;
 
-    public int CellsCount { get { return threadCells.Length; } }
+    public int CellCount { get { return threadCells != null ? threadCells.Length : 0; } }
 
     private void Awake()
     {
@@ -160,15 +160,9 @@ public class ThreadGrid : CustomGrid
 
     public void Clear()
     {
-        //for (int i = 0; i < threadCells.Length; i++)
-        //{
-        //    threadCells[i].ClearThreadData();
-        //}
-        foreach (Transform child in transform)
+        for (int i = 0; i < threadCells.Length; i++)
         {
-            Destroy(child.gameObject);
+            threadCells[i].Clear();
         }
-        threadCells = null;
-        cellThreadHandles = null;
     }
 }

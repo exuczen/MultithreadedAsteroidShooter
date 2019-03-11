@@ -110,7 +110,10 @@ public class AppManager : Singleton<AppManager>
     {
         asteroidCreator.RefreshCameraBounds();
         asteroidCreator.CreateAsteroids();
-        threadGrid.CreateThreadCells(asteroidCreator.SpawnGridSize);
+        if (threadGrid.CellCount > 0)
+            threadGrid.UpdateBounds(Vector2.zero);
+        else
+            threadGrid.CreateThreadCells(asteroidCreator.SpawnGridSize);
         threadGrid.AddAsteroidsToThreadCells(asteroidCreator.RawAsteroids);
         threadGrid.AddBodyToThreadCell(spaceship.RawSpaceship);
         threadGrid.StartThreads();
