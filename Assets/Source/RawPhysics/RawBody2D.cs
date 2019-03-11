@@ -157,6 +157,12 @@ namespace RawPhysics
             isInCameraView = false;
         }
 
+        public void RemoveGameObjectAfterCollision(RawBody2D other)
+        {
+            RemoveGameObject();
+            OnDestroyWithCollision(other);
+        }
+
         public void SetGameObject()
         {
             transform = GetGameObjectInstance(out spriteRenderer).transform;
@@ -165,6 +171,8 @@ namespace RawPhysics
         protected abstract void RemoveGameObjectInstance();
 
         protected abstract GameObject GetGameObjectInstance(out SpriteRenderer spriteRenderer);
+
+        protected virtual void OnDestroyWithCollision(RawBody2D other) { }
 
         public virtual void Explode(Vector2 explosionPos) { }
 

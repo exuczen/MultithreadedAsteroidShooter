@@ -31,7 +31,7 @@ public struct CollidedPair
         {
             bodyB.Explode(bodyB.Position);
         }
-        bodyA.RemoveGameObject();
-        bodyB.RemoveGameObject();
+        bodyA.RemoveGameObjectAfterCollision(bodyB);
+        bodyB.RemoveGameObjectAfterCollision(bodyA);
     }
 }

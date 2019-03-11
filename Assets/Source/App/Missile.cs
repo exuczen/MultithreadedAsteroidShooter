@@ -31,6 +31,12 @@ public class RawMissile : RawBody2D
         this.spaceship = spaceship;
     }
 
+    protected override void OnDestroyWithCollision(RawBody2D other)
+    {
+        if (other is RawAsteroid)
+            AppManager.Instance.AddPlayerPoints(Const.PlayerPointsForAsteroid);
+    }
+
     protected override GameObject GetGameObjectInstance(out SpriteRenderer spriteRenderer)
     {
         GameObject gameObject = spaceship.CreateMissileGameObject(this);
