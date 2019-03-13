@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-using DC;
+using Mindpower;
 
 public class AppManager : Singleton<AppManager>
 {

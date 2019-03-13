@@ -1,6 +1,7 @@
 ﻿using RawPhysics;
 using System.Collections.Generic;
 using UnityEngine;
+using Mindpower;
 
 public class CollisionGrid : CustomGrid
 {

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Mindpower;
+using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class CustomCell : MonoBehaviour

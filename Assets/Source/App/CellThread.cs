@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using Mindpower;
 
 public class CellThread : SyncedThread
 {
