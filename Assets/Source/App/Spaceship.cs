@@ -9,54 +9,30 @@ using UnityEngine;
 
 public class Spaceship : MonoBehaviour
 {
-    [SerializeField, Range(1.0f, 10.0f)]
-    private float linearVelocityMagnitude = 1f;
+    [SerializeField, Range(1.0f, 10.0f)] private float linearVelocityMagnitude = 1f;
+    [SerializeField, Range(1.0f, 5.0f)] private float angularVelocityMagnitude = 1f;
+    [SerializeField] private bool indestructible = default;
+    [SerializeField] private SpriteRenderer spriteRenderer = default;
+    [SerializeField] private Animator jetAnimator = default;
+    [SerializeField] private Missile missilePrefab = default;
+    [SerializeField] private Transform missileContainer = default;
+    [SerializeField] private SpaceshipExplosion explosion = default;
 
-    [SerializeField, Range(1.0f, 5.0f)]
-    private float angularVelocityMagnitude = 1f;
+    private const float LINEAR_VELOCITY = 10f;
+    private const float ANGULAR_VELOCITY = 2.8f;
 
-    [SerializeField]
-    private bool indestructible;
-
-    [SerializeField]
-    private SpriteRenderer spriteRenderer;
-
-    [SerializeField]
-    private Animator jetAnimator;
-
-    [SerializeField]
-    private Missile missilePrefab;
-
-    [SerializeField]
-    private Transform missileContainer;
-
-    [SerializeField]
-    private SpaceshipExplosion explosion;
-
-    private const float linearVelocityFactor = 10f;
-
-    private const float angularVelocityFactor = 2.8f;
-
-    private RawSpaceship rawSpaceship;
-
-    private RawTriangleCollider2D rawCollider;
-
-    private Vector2 missileBoxColliderSize;
-
-    private Bounds2 missileBounds;
-
-    private float lastShotTime;
-
-    private SpriteRenderer[] markers;
-
-    //private Coroutine shootRoutine;
+    private RawSpaceship rawSpaceship = default;
+    private RawTriangleCollider2D rawCollider = default;
+    private Vector2 missileBoxColliderSize = default;
+    private Bounds2 missileBounds = default;
+    private float lastShotTime = default;
+#if DEBUG_TRIANGLE
+    private SpriteRenderer[] markers = default;
+#endif
 
     private Vector2 SpriteSize { get => spriteRenderer.size; }
-
     public SpriteRenderer SpriteRenderer { get => spriteRenderer; }
-
     public bool Indestructible { get => indestructible; }
-
     public RawSpaceship RawSpaceship { get => rawSpaceship; }
 
     private void Awake()
@@ -93,7 +69,6 @@ public class Spaceship : MonoBehaviour
 
         rawSpaceship = new RawSpaceship(this, transform.position, transform.eulerAngles, new Bounds2(Vector2.zero, new Vector2(spaceshipMaxDim, spaceshipMaxDim)));
         rawSpaceship.SetCollider(rawCollider = new RawTriangleCollider2D(r[0], r[1], r[2]));
-        //rawSpaceship.SetCollider(new RawBoxCollider2D(boxCollider.size * transform.lossyScale));
         rawSpaceship.SetGameObject();
 
         //shootRoutine = StartCoroutine(ShootRoutine());
@@ -103,10 +78,9 @@ public class Spaceship : MonoBehaviour
     {
         float inputY = Input.GetAxis("Vertical");
         float inputX = Input.GetAxis("Horizontal");
-        //Debug.LogWarning(GetType() + ".Update: " + inputX + " " + inputY);
 
-        float angularVelocity = -inputX * angularVelocityFactor * angularVelocityMagnitude;
-        Vector2 linearVelocity = inputY * transform.up * linearVelocityFactor * linearVelocityMagnitude;
+        float angularVelocity = -inputX * ANGULAR_VELOCITY * angularVelocityMagnitude;
+        Vector2 linearVelocity = inputY * transform.up * LINEAR_VELOCITY * linearVelocityMagnitude;
 
         rawSpaceship.SetVelocities(linearVelocity, angularVelocity);
 
@@ -225,15 +199,11 @@ public class Spaceship : MonoBehaviour
         if (!indestructible)
             StartCoroutine(MakeIndestructibleRoutine(2f));
     }
-
-    //private void OnTriggerEnter2D(Collider2D collider)
-    //{
-    //}
 }
 
 public class RawSpaceship : RawBody2D
 {
-    private Spaceship spaceship;
+    private readonly Spaceship spaceship = default;
 
     public RawSpaceship(Spaceship spaceship, Vector2 position, Vector3 eulerAngles, Bounds2 bounds) : base(position, eulerAngles, bounds)
     {

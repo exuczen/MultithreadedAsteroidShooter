@@ -91,15 +91,9 @@ namespace RawPhysics
             return bodiesRay.x * bodiesRay.x + bodiesRay.y * bodiesRay.y <= radiusSum * radiusSum;
         }
 
-        public bool OverlapInt(RawCircleCollider2D circle1, RawCircleCollider2D circle2, Vector2Int bodiesRayInt)
-        {
-            int radiusSumInt = circle1.RadiusInt + circle1.RadiusInt;
-            return bodiesRayInt.x * bodiesRayInt.x + bodiesRayInt.y * bodiesRayInt.y <= radiusSumInt * radiusSumInt;
-        }
-
         public bool BasicRadiusOverlap(RawCircleCollider2D circle1, RawCircleCollider2D circle2, Vector2 bodiesRay)
         {
             return bodiesRay.x * bodiesRay.x + bodiesRay.y * bodiesRay.y <= basicDiameterSquared;
         }
-    } 
+    }
 }

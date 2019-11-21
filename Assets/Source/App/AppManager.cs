@@ -5,50 +5,24 @@ using MustHave.UI;
 
 public class AppManager : Singleton<AppManager>
 {
-    [SerializeField]
-    private bool debugGameObjects;
+    [SerializeField] private bool debugGameObjects = default;
+    [SerializeField] private bool debugSprites = default;
+    [SerializeField] private SpriteRenderer markerPrefab = default;
+    [SerializeField] private DebugPanel debugPanel = default;
+    [SerializeField] private MainPanel mainPanel = default;
+    [SerializeField] private CameraDriver cameraDriver = default;
+    [SerializeField] private Spaceship spaceship = default;
+    [SerializeField] private ThreadGrid threadGrid = default;
+    [SerializeField] private AsteroidCreator asteroidCreator = default;
 
-    [SerializeField]
-    private bool debugSprites;
-
-    [SerializeField]
-    private SpriteRenderer markerPrefab;
-
-    [SerializeField]
-    private DebugPanel debugPanel;
-
-    [SerializeField]
-    private MainPanel mainPanel;
-
-    [SerializeField]
-    private CameraDriver cameraDriver;
-
-    [SerializeField]
-    private Spaceship spaceship;
-
-    [SerializeField]
-    private ThreadGrid threadGrid;
-
-    [SerializeField]
-    private AsteroidCreator asteroidCreator;
-
-    private bool running;
-
-    private bool stopRequested;
-
-    private Player player;
+    private bool running = default;
+    private bool stopRequested = default;
+    private Player player = default;
 
     public static bool DebugGameObjects { get => _instance.debugGameObjects; }
-
     public static bool DebugSprites { get => _instance.debugSprites; }
-
     public static SpriteRenderer MarkerPrefab { get => _instance.markerPrefab; }
-
     public static ThreadGrid ThreadGrid { get => _instance.threadGrid; }
-
-    public AsteroidCreator AsteroidCreator { get => asteroidCreator; }
-
-    public MainPanel MainPanel { get => mainPanel; }
 
     public static SpriteRenderer CreateMarker(Vector3 position, Transform parent, Color color)
     {
@@ -101,10 +75,6 @@ public class AppManager : Singleton<AppManager>
         {
             Application.Quit();
         }
-    }
-
-    private void LateUpdate()
-    {
     }
 
     private void Start()

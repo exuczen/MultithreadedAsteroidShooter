@@ -12,7 +12,6 @@ public class SpaceshipExplosion : MonoBehaviour
 
     private void OnParticleSystemStopped()
     {
-        //Debug.LogWarning(GetType() + ".OnParticleSystemStopped");
         AppManager.Instance.StartFailRoutine();
     }
 

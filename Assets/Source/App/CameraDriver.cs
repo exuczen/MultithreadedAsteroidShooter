@@ -3,16 +3,17 @@
 [RequireComponent(typeof(Camera))]
 public class CameraDriver : MonoBehaviour
 {
-    private new Camera camera;
+    private new Camera camera = default;
+    private float cameraInitialOrthoSize = default;
 
-    private const float smoothFactor = 4f;
-
-    private float cameraInitialOrthoSize;
+    private const float SMOOTH_FACTOR = 0.08f;
+    private float distance = default;
 
     private void Start()
     {
         camera = GetComponent<Camera>();
         cameraInitialOrthoSize = camera.orthographicSize;
+        distance = transform.localPosition.z;
         ResetCameraPosition();
     }
 
@@ -23,16 +24,15 @@ public class CameraDriver : MonoBehaviour
         cameraPos.z = targetPos.z;
         float dist = Vector2.Distance(cameraPos, targetPos);
         float rMax = 2f * Mathf.Max(1f, 0.5f + 0.5f * camera.orthographicSize / cameraInitialOrthoSize);
-        float tMin = smoothFactor * Time.fixedDeltaTime;
-        float t = Mathf.Max(tMin, 1f - rMax / dist);
+        float t = Mathf.Max(SMOOTH_FACTOR, 1f - rMax / dist);
         cameraPos = Vector2.Lerp(cameraPos, targetPos, t);
-        cameraPos.z = -10f;
+        cameraPos.z = distance;
         transform.position = cameraPos;
     }
 
     public void ResetCameraPosition()
     {
-        camera.transform.position = new Vector3(0f, 0f, -10f);
+        camera.transform.position = new Vector3(0f, 0f, distance);
     }
 
 }

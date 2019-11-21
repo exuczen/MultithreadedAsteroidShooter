@@ -6,13 +6,10 @@ namespace RawPhysics
 {
     public class RawPhysics2D
     {
-        public static readonly List<RawColliderShape2D> ColliderShapes = EnumUtils.GetList<RawColliderShape2D>();
-
-        private static RawBoxCircleCollision2D boxCircleCollision = new RawBoxCircleCollision2D();
-
-        private static RawTriangleCircleCollision2D triangleCircleCollision = new RawTriangleCircleCollision2D();
-
-        private static RawCirclesCollision2D circlesCollision = new RawCirclesCollision2D();
+        public static readonly List<RawColliderShape2D> colliderShapes = EnumUtils.GetList<RawColliderShape2D>();
+        private static readonly RawBoxCircleCollision2D boxCircleCollision = new RawBoxCircleCollision2D();
+        private static readonly RawTriangleCircleCollision2D triangleCircleCollision = new RawTriangleCircleCollision2D();
+        private static readonly RawCirclesCollision2D circlesCollision = new RawCirclesCollision2D();
 
         static RawPhysics2D() { }
 
@@ -50,11 +47,5 @@ namespace RawPhysics
         {
             return circlesCollision.BasicRadiusOverlap(collider1, collider2, bodiesRay);
         }
-
-        public static bool CirclesOverlapInt(RawCircleCollider2D collider1, RawCircleCollider2D collider2, Vector2Int bodiesRayInt)
-        {
-            return circlesCollision.OverlapInt(collider1, collider2, bodiesRayInt);
-        }
-
-    } 
+    }
 }

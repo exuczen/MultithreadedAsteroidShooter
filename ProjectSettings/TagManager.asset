@@ -21,22 +21,22 @@ TagManager:
   - 
   - 
   - 
-  - CollCell00
-  - CollCell10
-  - CollCell20
-  - CollCell30
-  - CollCell01
-  - CollCell11
-  - CollCell21
-  - CollCell31
-  - CollCell02
-  - CollCell12
-  - CollCell22
-  - CollCell32
-  - CollCell03
-  - CollCell13
-  - CollCell23
-  - CollCell33
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0

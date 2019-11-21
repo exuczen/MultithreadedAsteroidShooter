@@ -4,31 +4,22 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class CustomCell : MonoBehaviour
 {
-    protected Vector2Int xy;
-
-    protected int index;
-
-    protected Bounds2 bounds;
-
-    protected CustomGrid grid;
-
-    protected bool isMiddle;
+    protected Vector2Int xy = default;
+    protected int index = default;
+    protected Bounds2 bounds = default;
+    protected CustomGrid grid = default;
+    protected bool isMiddle = default;
 
     public Bounds2 Bounds { get => bounds; set => bounds = value; }
-
     public int Index { get => index; set => index = value; }
-
     public bool IsMiddle { get => isMiddle; set => isMiddle = value; }
-
     public Vector2Int XY { get => xy; set => xy = value; }
-
     public CustomGrid Grid { get => grid; }
 
     public T CreateInstance<T>(CustomGrid grid, Vector2Int cellXY) where T : CustomCell
     {
         T cell = Instantiate(this as T, grid.transform, false);
         cell.Initialize(grid, cellXY);
-        //Debug.Log(GetType() + ".CreateInstance" + grid.BottomLeft + " " + grid.Size + " " + grid.CellSize);
         return cell;
     }
 

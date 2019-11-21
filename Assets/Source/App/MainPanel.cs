@@ -5,14 +5,9 @@ using UnityEngine.Events;
 
 public class MainPanel : UISingleton<MainPanel>
 {
-    [SerializeField]
-    private Text scoreText;
-
-    [SerializeField]
-    private Text failText;
-
-    [SerializeField]
-    private Button restartButton;
+    [SerializeField] private Text scoreText = default;
+    [SerializeField] private Text failText = default;
+    [SerializeField] private Button restartButton = default;
 
     public string ScoreVaule { get => scoreText.text; set => scoreText.text = value; }
     public Text FailText { get => failText; set => failText = value; }

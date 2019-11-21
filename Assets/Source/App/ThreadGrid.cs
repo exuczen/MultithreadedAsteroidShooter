@@ -7,18 +7,12 @@ using RawPhysics;
 
 public class ThreadGrid : CustomGrid
 {
-    [SerializeField]
-    private ThreadCell threadCellPrefab;
+    [SerializeField] private ThreadCell threadCellPrefab = default;
+    [SerializeField] private CollisionGrid collGridPrefab = default;
+    [SerializeField] private CollisionCell collCellPrefab = default;
 
-    [SerializeField]
-    private CollisionGrid collGridPrefab;
-
-    [SerializeField]
-    private CollisionCell collCellPrefab;
-
-    private ThreadCell[] threadCells;
-
-    private EventWaitHandle[] cellThreadHandles;
+    private ThreadCell[] threadCells = default;
+    private EventWaitHandle[] cellThreadHandles = default;
 
     public int CellCount { get { return threadCells != null ? threadCells.Length : 0; } }
 
@@ -32,7 +26,6 @@ public class ThreadGrid : CustomGrid
         int threadsCount;
         int xCount, yCount;
         int logicalProcessorCount = SystemInfo.processorCount;
-        //logicalProcessorCount = 4;
         if (logicalProcessorCount > 4)
         {
             xCount = yCount = 5;
@@ -47,11 +40,8 @@ public class ThreadGrid : CustomGrid
         }
         threadsCount = xCount * yCount;
         float collCellSize = gridSize.x / 15;
-        //float collCellSize = gridSize.x / 9;
-        //Debug.Log(GetType() + ".CreateThreadCells: " + " " + System.Environment.ProcessorCount + " " + lcpuCount);
         SetParams(gridSize, new Vector2Int(xCount, yCount));
         bounds.Center = transform.position = (Vector2)Camera.main.transform.position;
-        //return;
         threadCellPrefab.gameObject.SetActive(true);
         threadCells = new ThreadCell[threadsCount];
         cellThreadHandles = new EventWaitHandle[threadsCount];

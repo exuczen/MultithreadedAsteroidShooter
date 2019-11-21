@@ -5,11 +5,8 @@ using UnityEngine;
 
 public class ThreadCell : CustomCell
 {
-    private CellThread thread;
-
-    private CollisionGrid collGrid;
-
-    private Bounds2 cameraBounds;
+    private CellThread thread = default;
+    private Bounds2 cameraBounds = default;
 
     public Bounds2 CameraBounds { get => cameraBounds; set => cameraBounds = value; }
 
@@ -22,7 +19,7 @@ public class ThreadCell : CustomCell
 
     public void CreateCollisionGrid(float cellSize, CollisionGrid collGridPrefab, CollisionCell collCellPrefab)
     {
-        collGrid = thread.CollGrid = collGridPrefab.CreateInstance(this, collCellPrefab, cellSize);
+        thread.CollGrid = collGridPrefab.CreateInstance(this, collCellPrefab, cellSize);
     }
 
     public void StartThread()

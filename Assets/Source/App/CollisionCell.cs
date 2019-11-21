@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DEBUG_CELL
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -8,27 +10,18 @@ using MustHave;
 
 public class CollisionCell : CustomCell
 {
-    public const int DefaultLayer = Const.LayerDefault;
-
     private static int colorIndex = 0;
 
-    private List<RawBody2D> bodies = new List<RawBody2D>();
-
-    private List<RawBody2D> bodiesOutOfBounds = new List<RawBody2D>();
-
-    private List<RawBody2D> bodiesInCameraView = new List<RawBody2D>();
-
-    private Dictionary<RawColliderShape2D, List<RawCollider2D>> collidersDict = new Dictionary<RawColliderShape2D, List<RawCollider2D>>();
+    private readonly List<RawBody2D> bodies = new List<RawBody2D>();
+    private readonly List<RawBody2D> bodiesOutOfBounds = new List<RawBody2D>();
+    private readonly List<RawBody2D> bodiesInCameraView = new List<RawBody2D>();
+    private readonly Dictionary<RawColliderShape2D, List<RawCollider2D>> collidersDict = new Dictionary<RawColliderShape2D, List<RawCollider2D>>();
 
     private List<RawCircleCollider2D> circleColliders = new List<RawCircleCollider2D>();
-
     private List<RawBoxCollider2D> boxColliders = new List<RawBoxCollider2D>();
-
     private List<RawTriangleCollider2D> triangleColliders = new List<RawTriangleCollider2D>();
-
-    private CollisionGrid collGrid;
-
-    private Color color;
+    private CollisionGrid collGrid = default;
+    private Color color = default;
 
     public int BodyCount { get => bodies.Count; }
 
@@ -62,21 +55,17 @@ public class CollisionCell : CustomCell
             (pX == 1 && pY == 0 && x == 0 && y == yCount - 1) ||
             (pX == 0 && pY == 1 && x == xCount - 1 && y == 0) ||
             (pX == 1 && pY == 1 && x == 0 && y == 0);
-            //parentCell.IsMiddle = (pX == 0 && pY == 0) || (pX == 1 && pY == 0) || (pX == 0 && pY == 1) || (pX == 1 && pY == 1);
         }
         //Debug.LogWarning(GetType() + ".isMiddle=" + isMiddle);
         if (cell.isMiddle)
         {
             cell.GetComponent<SpriteRenderer>().color = Color.black;
-            //cell.GetComponent<SpriteRenderer>().enabled = true;
+#if DEBUG_CELL
+            cell.GetComponent<SpriteRenderer>().enabled = true;
+#endif
         }
-        //if (parentCell.IsMiddle)
-        //{
-        //    parentCell.GetComponent<SpriteRenderer>().color = Color.black;
-        //    //parentCell.GetComponent<SpriteRenderer>().enabled = true;
-        //}
 
-        foreach (RawColliderShape2D shape in RawPhysics2D.ColliderShapes)
+        foreach (RawColliderShape2D shape in RawPhysics2D.colliderShapes)
         {
             cell.collidersDict.Add(shape, new List<RawCollider2D>());
         }
@@ -93,7 +82,6 @@ public class CollisionCell : CustomCell
 
     public void AddBody(RawBody2D body)
     {
-        //Debug.LogWarning(GetType() + ".AddBody: cellIndex=" + index + " color=" + color + " isMiddle=" + isMiddle);
         body.SetSpriteColor(AppManager.DebugSprites ? color : Color.white);
         body.collCellIndex = index;
         bodies.Add(body);
@@ -105,7 +93,6 @@ public class CollisionCell : CustomCell
         if (isMiddle || bounds.Size.y < cameraBounds.Size.y)
         {
             bodiesInCameraView.Clear();
-            //Debug.LogWarning(GetType() + "." + cameraBounds.Size);
             for (int i = 0; i < bodies.Count; i++)
             {
                 RawBody2D body = bodies[i];
@@ -148,7 +135,9 @@ public class CollisionCell : CustomCell
         {
             T1 colliderA = collidersA[i];
             RawBody2D bodyA = colliderA.Body;
-            //bodyA.SetSpriteColor(Color.white);
+#if DEBUG_CELL
+            bodyA.SetSpriteColor(Color.white);
+#endif
 
             for (int j = 0; j < collidersB.Count; j++)
             {
@@ -157,7 +146,9 @@ public class CollisionCell : CustomCell
                 if (bodyA.BoundsOverlap(bodyB, out Vector2 bodiesRay) &&
                     overlap(colliderA, colliderB, bodiesRay))
                 {
-                    //bodyA.SetSpriteColor(Color.red);
+#if DEBUG_CELL
+                    bodyA.SetSpriteColor(Color.red);
+#endif
                     collGrid.AddCollidedPair(bodyA, bodyB);
                 }
             }
@@ -167,7 +158,6 @@ public class CollisionCell : CustomCell
     private void UpdateCollisions<T1>(List<T1> colliders, Func<T1, T1, Vector2, bool> overlap)
         where T1 : RawCollider2D
     {
-        //Debug.LogWarning(GetType() + "." + colliders.Count + " " + colliders.Count * (colliders.Count - 1) / 2);
         for (int i = 0; i < colliders.Count; i++)
         {
             T1 colliderA = colliders[i];
@@ -189,14 +179,6 @@ public class CollisionCell : CustomCell
     private List<T> GetCollidersOfType<T>(RawColliderShape2D shape) where T : RawCollider2D
     {
         return collidersDict[shape].Cast<T>().ToList();
-
-        //List<RawCollider2D> rawColliders = collidersDict[shape];
-        //List<T> colliders = new List<T>();
-        //foreach (var rawCollider in rawColliders)
-        //{
-        //    colliders.Add(rawCollider as T);
-        //}
-        //return colliders;
     }
 
     private void ClearColliders()
@@ -226,7 +208,6 @@ public class CollisionCell : CustomCell
         {
             triangleColliders = GetCollidersOfType<RawTriangleCollider2D>(RawColliderShape2D.Triangle);
             boxColliders = GetCollidersOfType<RawBoxCollider2D>(RawColliderShape2D.Box);
-            //Debug.LogWarning(GetType() + "." + triangleColliders.Count);
 
             UpdateCollisions(triangleColliders, circleColliders, RawPhysics2D.TriangleCircleOverlap);
             UpdateCollisions(boxColliders, circleColliders, RawPhysics2D.BoxCircleOverlap);

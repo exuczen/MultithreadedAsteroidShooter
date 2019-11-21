@@ -4,9 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class CustomGrid : MonoBehaviour
 {
-    protected Bounds2 bounds;
-    protected Vector2 cellSize;
-    protected Vector2Int xyCount;
+    protected Bounds2 bounds = default;
+    protected Vector2 cellSize = default;
+    protected Vector2Int xyCount = default;
 
     public Vector2 BottomLeft
     {
@@ -17,13 +17,9 @@ public class CustomGrid : MonoBehaviour
     }
 
     public Vector2Int XYCount => xyCount;
-
     public Vector2 Size => bounds.Size;
-
     public Vector2 Center => bounds.Center;
-
     public Vector2 CellSize => cellSize;
-
     public Bounds2 Bounds => bounds;
 
     public T CreateInstance<T>(Transform parent, Bounds2 bounds, Vector2Int xyCount) where T : CustomGrid
@@ -35,7 +31,6 @@ public class CustomGrid : MonoBehaviour
 
     private void SetParams(Bounds2 bounds, Vector2Int xyCount)
     {
-        //Debug.Log(GetType() + ".SetParams " + bounds + " " + xyCount);
         this.xyCount = xyCount;
         this.bounds = bounds;
         cellSize = new Vector2(Size.x / xyCount.x, Size.y / xyCount.y);
@@ -55,8 +50,6 @@ public class CustomGrid : MonoBehaviour
         float rayY = position.y - bounds.Min.y;
         int cellX = Mathf.Clamp((int)(rayX / cellSize.x), 0, xyCount.x - 1);
         int cellY = Mathf.Clamp((int)(rayY / cellSize.y), 0, xyCount.y - 1);
-        //Debug.LogWarning(GetType() + "." + " " + BottomLeft + " " + position + " " + rayX / cellSize.x + " " + rayY / cellSize.y);
-        //Debug.LogWarning(GetType() + ".GetCellIndex: " + " " + rayX + " " + rayY + " " + " " + cellSize.x + " " + cellSize.y + " " + cellX + " " + cellY);
         return cellY * xyCount.x + cellX;
     }
 }

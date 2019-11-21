@@ -2,7 +2,7 @@
 
 public class Player : MonoBehaviour
 {
-    private int score;
+    private int score = default;
 
     public int Score { get => score; set => score = value; }
 

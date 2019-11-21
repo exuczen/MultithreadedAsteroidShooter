@@ -6,31 +6,23 @@ using MustHave;
 
 public class CellThread : SyncedThread
 {
-    private List<RawBody2D> bodies = new List<RawBody2D>();
+    private readonly List<RawBody2D> bodies = new List<RawBody2D>();
+    private readonly List<RawBody2D> bodiesOutOfBounds = new List<RawBody2D>();
+    private readonly List<RawBody2D> bodiesToRespawn = new List<RawBody2D>();
+    private readonly List<RawBody2D> bodiesOutOfTime = new List<RawBody2D>();
 
-    private List<RawBody2D> bodiesOutOfBounds = new List<RawBody2D>();
-
-    private List<RawBody2D> bodiesToRespawn = new List<RawBody2D>();
-
-    private List<RawBody2D> bodiesOutOfTime = new List<RawBody2D>();
-
-    private ThreadGrid grid;
-
-    private ThreadCell cell;
-
-    private Bounds2 cellBounds;
-
-    private Bounds2 cameraBounds;
-
-    private CollisionGrid collGrid;
+    private readonly ThreadGrid grid = default;
+    private readonly ThreadCell cell = default;
+    private Bounds2 cellBounds = default;
+    private Bounds2 cameraBounds = default;
+    private CollisionGrid collGrid = default;
 
     public CollisionGrid CollGrid { set => collGrid = value; }
 
-    private Vector2 gridSize;
-    private Vector2 gridBottomLeft;
-    private Vector2Int gridXYCount;
-
-    private bool running;
+    private Vector2 gridSize = default;
+    private Vector2 gridBottomLeft = default;
+    private Vector2Int gridXYCount = default;
+    private bool running = default;
 
     public void UpdateBounds()
     {
@@ -46,9 +38,6 @@ public class CellThread : SyncedThread
         gridSize = grid.Size;
         gridXYCount = grid.XYCount;
         UpdateBounds();
-        //Debug.LogWarning(GetType() + ".**");
-        //Debug.LogWarning(GetType() + "." + gridSize + " " + grid.ScaledSize);
-        //Debug.LogWarning(GetType() + "." + gridBottomLeft + " " + grid.ScaledBottomLeft);
     }
 
     public override void PreSyncThread()
@@ -104,17 +93,12 @@ public class CellThread : SyncedThread
         else
         {
             collGrid.GetBodiesInCameraView(out List<RawBody2D> bodiesInCameraView);
-            //Debug.LogWarning(GetType() + ".bodiesInCameraView.Count=" + bodiesInCameraView.Count);
             for (int i = 0; i < bodiesInCameraView.Count; i++)
             {
                 bodiesInCameraView[i].SetGameObjectData();
             }
         }
         running = cell.enabled && cell.gameObject.activeInHierarchy;
-        //for (int i = 0; i < collGrid.Cells.Length; i++)
-        //{
-        //    Debug.Log(GetType() + "[" + i + "].BodyCount: " + collGrid.Cells[i].BodyCount);
-        //}
     }
 
     private void UpdateBodyOutOfSpacetime(float time, RawBody2D body)
@@ -159,11 +143,10 @@ public class CellThread : SyncedThread
         if (!running)
             return;
 
-        //Debug.LogWarning(GetType() + ".UpdateThread" + " " + GetHashCode() + " " + bodies.Count);
         for (int i = 0; i < bodies.Count; i++)
         {
             RawBody2D body = bodies[i];
-            body.UpdateMotion(time, deltaTime);
+            body.UpdateMotion(deltaTime);
             UpdateBodyOutOfSpacetime(time, body);
         }
         for (int i = 0; i < bodiesOutOfTime.Count; i++)

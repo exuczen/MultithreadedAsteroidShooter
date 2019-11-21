@@ -6,49 +6,35 @@ namespace RawPhysics
 {
     public abstract class RawBody2D
     {
-        public int threadCellIndex;
-        public int collCellIndex;
-        public bool isInCameraView;
+        public int threadCellIndex = default;
+        public int collCellIndex = default;
+        public bool isInCameraView = default;
 
-        private Vector2 position;
-        //private Vector2Int positionInt;
-        private Vector2 velocity;
-        private Vector3 eulerAngles;
-        private float angularVelocity;
-        private float rotationAngleRad;
-        protected Bounds2 bounds;
-        private Vector2Int sizeInt;
-        private Vector2Int halfSizeInt;
-        private Color spriteColor;
-        private float respawnTime;
-        private float lifeTime;
-        private float lifeStartTime;
-        protected bool respawnable;
-        protected bool explosive;
+        private Vector2 position = default;
+        private Vector2 velocity = default;
+        private Vector3 eulerAngles = default;
+        private float angularVelocity = default;
+        private float rotationAngleRad = default;
+        protected Bounds2 bounds = default;
+        private Color spriteColor = default;
+        private float respawnTime = default;
+        private float lifeTime = default;
+        private float lifeStartTime = default;
+        protected bool respawnable = default;
+        protected bool explosive = default;
 
-        protected Transform transform;
-        private SpriteRenderer spriteRenderer;
+        protected Transform transform = default;
+        private SpriteRenderer spriteRenderer = default;
 
         protected RawCollider2D collider;
         public RawCollider2D Collider { get => collider; }
         public RawColliderShape2D ColliderShape { get => collider.Shape; }
-
         public Bounds2 Bounds { get => bounds; }
         public Quaternion Rotation { get => Quaternion.Euler(eulerAngles); }
         public float RotationAngleRad { get => rotationAngleRad; }
-        //public Vector2 Position { get => position; set => position = value; }
-        public Vector2 Position
-        {
-            get => position;
-            set {
-                position = value;
-                //positionInt.x = (int)(position.x * Const.FloatToIntFactor);
-                //positionInt.y = (int)(position.y * Const.FloatToIntFactor);
-            }
-        }
+        public Vector2 Position { get => position; set { position = value; } }
         public Vector2 Velocity { get => velocity; }
         public float AngularVelocity { get => angularVelocity; }
-
         public float RespawnTime { get => respawnTime; set => respawnTime = value; }
         public bool Explosive { get => explosive; }
         public bool Respawnable { get => respawnable; }
@@ -69,10 +55,6 @@ namespace RawPhysics
             isInCameraView = false;
             spriteColor = Color.black;
             bounds.Center = position;
-            sizeInt.x = (int)(bounds.Size.x * Const.FloatToIntFactor);
-            sizeInt.y = (int)(bounds.Size.y * Const.FloatToIntFactor);
-            halfSizeInt.x = sizeInt.x >> 1;
-            halfSizeInt.y = sizeInt.y >> 1;
         }
 
         public void Reset()
@@ -109,25 +91,13 @@ namespace RawPhysics
             return
                 Mathf.Abs(bodiesRay.x) < body.bounds.Extents.x + bounds.Extents.x &&
                 Mathf.Abs(bodiesRay.y) < body.bounds.Extents.y + bounds.Extents.y;
-            //return bounds.Intersects(body.bounds);
         }
 
-        //public bool BoundsOverlapInt(RawBody2D body, out Vector2Int bodiesRayInt)
-        //{
-        //    bodiesRayInt = body.positionInt - positionInt;
-        //    return
-        //        Math.Abs(bodiesRayInt.x) < body.halfSizeInt.x + halfSizeInt.x &&
-        //        Math.Abs(bodiesRayInt.y) < body.halfSizeInt.y + halfSizeInt.y;
-        //}
-
-
-        public void UpdateMotion(float time, float deltaTime)
+        public void UpdateMotion(float deltaTime)
         {
             position += velocity * deltaTime;
             rotationAngleRad += angularVelocity * deltaTime;
             bounds.Center = position;
-            //positionInt.x = (int)(position.x * Const.FloatToIntFactor);
-            //positionInt.y = (int)(position.y * Const.FloatToIntFactor);
             collider.Update();
         }
 
@@ -178,6 +148,5 @@ namespace RawPhysics
         public virtual void Explode(Vector2 explosionPos) { }
 
         public virtual void Respawn() { }
-
-    } 
+    }
 }

@@ -7,29 +7,23 @@ public class CollisionGrid : CustomGrid
 {
     private readonly Color[] cellColors = new Color[] { Color.red, Color.green, Color.blue, Color.yellow, Color.cyan, Color.white };
 
-    private CollisionCell[] cells;
-
     protected List<CollidedPair> collidedPairs = new List<CollidedPair>();
-
-    private Bounds2 cameraBounds;
+    private CollisionCell[] cells = default;
+    private Bounds2 cameraBounds = default;
 
     public List<CollidedPair> CollidedPairs { get => collidedPairs; }
-
     public Bounds2 CameraBounds { get => cameraBounds; set => cameraBounds = value; }
-
     public CollisionCell[] Cells { get => cells; }
 
     public CollisionGrid CreateInstance(CustomCell parentCell, CollisionCell collCellPrefab, float cellSize)
     {
         Bounds2 bounds = parentCell.Bounds;
-        //Debug.Log(GetType() + ".CollisionGrid: " + bounds.center + " " + bounds.size + " " + cellSize + " " + parentCell.MiddleAnchor);
         float eps = 0.0001f;
         int xCount = Mathf.Max(1, (int)((bounds.Size.x + eps) / cellSize));
         int yCount = Mathf.Max(1, (int)((bounds.Size.y + eps) / cellSize));
         Vector2Int xyCount = new Vector2Int(xCount, yCount);
         CollisionGrid grid = CreateInstance<CollisionGrid>(parentCell.transform, bounds, xyCount);
         grid.cells = new CollisionCell[xCount * yCount];
-        //Debug.Log(GetType() + ".CollisionGrid: " + grid.BottomLeft + " " + grid.Size + " " + grid.cellSize + " " + grid.xyCount);
         for (int y = 0; y < yCount; y++)
         {
             for (int x = 0; x < xCount; x++)
@@ -48,7 +42,6 @@ public class CollisionGrid : CustomGrid
 
     public bool AddBodyToCell(RawBody2D body)
     {
-        //return;
         int cellIndex = GetCellIndex(body.Position);
         if (cellIndex >= 0)
         {
@@ -60,7 +53,6 @@ public class CollisionGrid : CustomGrid
 
     public void RemoveBodyFromCell(RawBody2D body)
     {
-        //return;
         if (body.collCellIndex < 0)
             body.collCellIndex = GetCellIndex(body.Position);
         if (body.collCellIndex >= 0)

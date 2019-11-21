@@ -5,27 +5,23 @@ using MustHave;
 
 public class Missile : MonoBehaviour
 {
-    private RawMissile rawMissile;
+    private RawMissile rawMissile = default;
 
     public RawMissile RawMissile { get => rawMissile; set => rawMissile = value; }
 
     public Missile CreateInstance(Transform parent, RawMissile rawMissile)
     {
         Missile missile = Instantiate(this, rawMissile.Position, rawMissile.Rotation, parent);
-        missile.transform.localScale  = transform.lossyScale;
+        missile.transform.localScale = transform.lossyScale;
         missile.RawMissile = rawMissile;
         missile.gameObject.SetActive(true);
         return missile;
     }
-
-    //private void OnTriggerEnter2D(Collider2D collider)
-    //{
-    //}
 }
 
 public class RawMissile : RawBody2D
 {
-    private Spaceship spaceship;
+    private Spaceship spaceship = default;
 
     public RawMissile(Spaceship spaceship, Vector2 position, Vector3 eulerAngles, Bounds2 bounds) : base(position, eulerAngles, bounds)
     {

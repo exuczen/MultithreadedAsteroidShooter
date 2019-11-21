@@ -4,18 +4,13 @@ using UnityEngine;
 public abstract class SyncedThread
 {
     private Thread childThread = null;
-    private EventWaitHandle childThreadHandle = new EventWaitHandle(true, EventResetMode.ManualReset);
-    private EventWaitHandle mainThreadHandle = new EventWaitHandle(true, EventResetMode.ManualReset);
+    private readonly EventWaitHandle childThreadHandle = new EventWaitHandle(true, EventResetMode.ManualReset);
+    private readonly EventWaitHandle mainThreadHandle = new EventWaitHandle(true, EventResetMode.ManualReset);
 
-    private bool running;
-
-    private bool stopRequested;
-
-    private int loopCounter;
-
-    private float deltaTime;
-
-    private float time;
+    private bool running = default;
+    private bool stopRequested = default;
+    private float deltaTime = default;
+    private float time = default;
 
     protected abstract void UpdateThread(float time, float deltaTime);
 
@@ -35,10 +30,7 @@ public abstract class SyncedThread
         while (running)
         {
             childThreadHandle.Reset();
-            //if (thread.Name.Equals("ThreadCell2"))
-            //    Thread.Sleep(500);
             UpdateThread(time, deltaTime);
-            loopCounter++;
             WaitHandle.SignalAndWait(mainThreadHandle, childThreadHandle); //Signals one WaitHandle and waits on another.
         }
         WaitHandle.SignalAndWait(mainThreadHandle, childThreadHandle);
@@ -75,7 +67,6 @@ public abstract class SyncedThread
         stopRequested = false;
         mainThreadHandle.WaitOne();
         mainThreadHandle.Reset();
-        loopCounter = 0;
         time = Time.time;
         deltaTime = Time.deltaTime;
         childThreadHandle.Set();

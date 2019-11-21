@@ -6,30 +6,19 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(Tilemap))]
 public class SpaceTilemap : MonoBehaviour
 {
-    [SerializeField]
-    private new Camera camera;
+    [SerializeField] private new Camera camera = default;
+    [SerializeField] private Tile[] tiles = default;
 
-    [SerializeField]
-    private Tile[] tiles;
+    private Grid grid = default;
+    private Tilemap tilemap = default;
 
-    private Grid grid;
-
-    private Tilemap tilemap;
-
-    private TilemapRenderer tilemapRenderer;
-
-    private float pixelsPerUnit;
-
-    private int rowsCount;
-
-    private Vector3Int cameraTilePosition;
+    private Vector3Int cameraTilePosition = default;
 
     public Camera Camera { get => camera; set => camera = value; }
 
     private void Start()
     {
         tilemap = GetComponent<Tilemap>();
-        tilemapRenderer = tilemap.GetComponent<TilemapRenderer>();
         grid = tilemap.layoutGrid;
         cameraTilePosition = tilemap.WorldToCell(camera.transform.position);
         FillMapInView();
@@ -137,9 +126,5 @@ public class SpaceTilemap : MonoBehaviour
             }
         }
         cameraTilePosition = camCurrTilePos;
-        //Debug.Log(GetType() + ".cameraTilePosition="+cameraTilePosition);
-        //Debug.Log(GetType() + "."+tilemap.GetTile(cameraTilePosition));
-        //Debug.LogWarning(GetType() + "." + tilemap.WorldToCell(camera.transform.position) + " " + grid.cellSize + " " + tilemap.cellSize + " " + Screen.height);
-
     }
 }
