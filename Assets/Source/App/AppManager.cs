@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Mindpower;
+using MustHave.DesignPatterns;
+using MustHave.UI;
 
 public class AppManager : Singleton<AppManager>
 {
@@ -37,13 +38,13 @@ public class AppManager : Singleton<AppManager>
 
     private Player player;
 
-    public static bool DebugGameObjects { get => instance.debugGameObjects; }
+    public static bool DebugGameObjects { get => _instance.debugGameObjects; }
 
-    public static bool DebugSprites { get => instance.debugSprites; }
+    public static bool DebugSprites { get => _instance.debugSprites; }
 
-    public static SpriteRenderer MarkerPrefab { get => instance.markerPrefab; }
+    public static SpriteRenderer MarkerPrefab { get => _instance.markerPrefab; }
 
-    public static ThreadGrid ThreadGrid { get => instance.threadGrid; }
+    public static ThreadGrid ThreadGrid { get => _instance.threadGrid; }
 
     public AsteroidCreator AsteroidCreator { get => asteroidCreator; }
 
@@ -51,7 +52,7 @@ public class AppManager : Singleton<AppManager>
 
     public static SpriteRenderer CreateMarker(Vector3 position, Transform parent, Color color)
     {
-        SpriteRenderer marker = Instantiate(instance.markerPrefab, position, Quaternion.identity, parent);
+        SpriteRenderer marker = Instantiate(_instance.markerPrefab, position, Quaternion.identity, parent);
         marker.gameObject.SetActive(true);
         marker.color = color;
         return marker;

@@ -1,4 +1,4 @@
-﻿using Mindpower;
+﻿using MustHave.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ namespace RawPhysics
 {
     public class RawPhysics2D
     {
-        public static readonly List<RawColliderShape2D> ColliderShapes = EnumUtil.GetList<RawColliderShape2D>();
+        public static readonly List<RawColliderShape2D> ColliderShapes = EnumUtils.GetList<RawColliderShape2D>();
 
         private static RawBoxCircleCollision2D boxCircleCollision = new RawBoxCircleCollision2D();
 

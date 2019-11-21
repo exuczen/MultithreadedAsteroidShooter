@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Mindpower;
+using MustHave.DesignPatterns;
 using UnityEngine.Events;
 
 public class MainPanel : UISingleton<MainPanel>

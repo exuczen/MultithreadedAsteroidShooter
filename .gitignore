@@ -3,6 +3,7 @@
 /LibraryWrappers/
 /Temp/
 /obj/Debug/
+/Assets/External/MustHave/
 *.sln
 *.csproj
 *.userprefs

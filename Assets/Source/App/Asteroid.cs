@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Mindpower;
+using MustHave;
 using RawPhysics;
 
 [RequireComponent(typeof(SpriteRenderer))]

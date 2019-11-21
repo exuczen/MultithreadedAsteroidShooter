@@ -1,4 +1,4 @@
-﻿using Mindpower;
+﻿using MustHave;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]

@@ -1,5 +1,4 @@
-﻿using Mindpower;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RawPhysics
 {
