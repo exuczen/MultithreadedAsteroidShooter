@@ -41,19 +41,8 @@ public class AsteroidCreator : MonoBehaviour
 
         RefreshCameraBounds();
 
-        CircleCollider2D asteroidPrefabCollider = asteroidPrefab.GetComponent<CircleCollider2D>();
-        CircleCollider2D debugAsteroidPrefabCollider = debugAsteroidPrefab.GetComponent<CircleCollider2D>();
-
-        asteroidPrefabCollider.gameObject.layer = Layer.Default;
-        asteroidPrefabCollider.enabled = false;
-        asteroidColliderRadius = asteroidPrefabCollider.radius * asteroidPrefabCollider.transform.localScale.x;
-
-        debugAsteroidPrefabCollider.gameObject.layer = Layer.Default;
-        debugAsteroidPrefabCollider.enabled = false;
-        debugAsteroidColliderRadius = debugAsteroidPrefabCollider.radius * debugAsteroidPrefabCollider.transform.localScale.x;
-
-        Destroy(asteroidPrefabCollider);
-        Destroy(debugAsteroidPrefabCollider);
+        asteroidColliderRadius = asteroidPrefab.Radius;
+        debugAsteroidColliderRadius = debugAsteroidPrefab.Radius;
     }
 
     private void Start()
@@ -134,7 +123,7 @@ public class AsteroidCreator : MonoBehaviour
         Vector3Int cellPosition = Vector3Int.zero;
         Vector3 asteroidEuler = Vector3.zero;
 
-        Bounds2 asteroidBounds = new Bounds2(Vector2.zero, new Vector2(2 * asteroidColliderRadius, 2 * asteroidColliderRadius));
+        Bounds2 asteroidBounds = new Bounds2(Vector2.zero, new Vector2(2f * asteroidColliderRadius, 2f * asteroidColliderRadius));
         int halfXYCount = spawnGridXYSize >> 1;
         for (int y = -halfXYCount; y < halfXYCount; y++)
         {
@@ -147,7 +136,7 @@ public class AsteroidCreator : MonoBehaviour
                 rawAsteroids.Add(rawAsteroid);
             }
         }
-        int xyCount = halfXYCount << 1;
+        int xyCount = spawnGridXYSize;
         int halfXCountInView = Mathf.CeilToInt(cameraBounds.Extents.x / cellSize.x);
         int halfYCountInView = Mathf.CeilToInt(cameraBounds.Extents.y / cellSize.y);
         for (int y = -halfYCountInView; y < halfYCountInView; y++)

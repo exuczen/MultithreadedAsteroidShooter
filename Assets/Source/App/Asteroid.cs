@@ -5,9 +5,12 @@ using RawPhysics;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Asteroid : MonoBehaviour
 {
+    [SerializeField] private float radius = default;
+
     private RawAsteroid rawAsteroid = default;
 
     public RawAsteroid RawAsteroid { get => rawAsteroid; set { rawAsteroid = value; } }
+    public float Radius { get => radius; }
 
     public Asteroid CreateInstance(Transform parent)
     {

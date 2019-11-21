@@ -5,9 +5,12 @@ using MustHave;
 
 public class Missile : MonoBehaviour
 {
+    [SerializeField] private Vector2 size = default;
+
     private RawMissile rawMissile = default;
 
     public RawMissile RawMissile { get => rawMissile; set => rawMissile = value; }
+    public Vector2 Size { get => size; }
 
     public Missile CreateInstance(Transform parent, RawMissile rawMissile)
     {

@@ -16,7 +16,8 @@ public class Spaceship : MonoBehaviour
     [SerializeField] private Animator jetAnimator = default;
     [SerializeField] private Missile missilePrefab = default;
     [SerializeField] private Transform missileContainer = default;
-    [SerializeField] private SpaceshipExplosion explosion = default;
+    [SerializeField] private Transform missileLauncher = default;
+    [SerializeField] private SpaceshipExplosion explosionPrefab = default;
 
     private const float LINEAR_VELOCITY = 10f;
     private const float ANGULAR_VELOCITY = 2.8f;
@@ -38,13 +39,9 @@ public class Spaceship : MonoBehaviour
     private void Awake()
     {
         missilePrefab.gameObject.SetActive(false);
-
-        BoxCollider2D missileBoxCollider = missilePrefab.GetComponent<BoxCollider2D>();
-        missileBoxCollider.enabled = false;
-        missileBoxColliderSize = missileBoxCollider.size * missileBoxCollider.transform.lossyScale;
+        missileBoxColliderSize = missilePrefab.Size * missilePrefab.transform.lossyScale;
         float missileMaxDim = Mathf.Max(missileBoxColliderSize.x, missileBoxColliderSize.y);
         missileBounds = new Bounds2(Vector2.zero, new Vector2(missileMaxDim, missileMaxDim));
-        Destroy(missileBoxCollider);
 
         Bounds2 spriteBounds = Bounds2.BoundsToBounds2(spriteRenderer.bounds);
         Vector2 p0 = transform.position;
@@ -109,7 +106,6 @@ public class Spaceship : MonoBehaviour
         float angularVelocity = rawSpaceship.AngularVelocity;
         float velocitySign = Mathf.Sign(Vector2.Dot(linearVelocity, transform.up));
 
-        Transform missileLauncher = missilePrefab.transform.parent;
         missileLauncher.localRotation = Quaternion.Euler(0, 0, angularVelocity * Mathf.Rad2Deg * Time.deltaTime);
         Vector2 missileRay = missilePrefab.transform.localPosition;
         Vector2 missileLauncherRay = missileLauncher.localPosition.y * missileLauncher.transform.lossyScale.y * transform.up;
@@ -174,16 +170,13 @@ public class Spaceship : MonoBehaviour
     public void ResetSpaceship()
     {
         rawSpaceship.Reset();
-        explosion.gameObject.SetActive(false);
         gameObject.SetActive(true);
         //shootRoutine = StartCoroutine(ShootRoutine());
     }
 
-    public void StartExplosion(Vector2 pos)
+    public void StartExplosion(Vector2 position)
     {
-        explosion.gameObject.SetActive(true);
-        explosion.transform.position = pos;
-        explosion.Play();
+        explosionPrefab.CreateInstance(position);
     }
 
     private IEnumerator MakeIndestructibleRoutine(float duration)

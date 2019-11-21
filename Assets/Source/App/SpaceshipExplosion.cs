@@ -1,22 +1,16 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(ParticleSystem))]
 public class SpaceshipExplosion : MonoBehaviour
 {
-    [SerializeField]
-    private ParticleSystem particles;
-
-    private void Awake()
+    public SpaceshipExplosion CreateInstance(Vector3 position)
     {
-        particles = GetComponent<ParticleSystem>();
+        return Instantiate(this, position, Quaternion.identity);
     }
 
     private void OnParticleSystemStopped()
     {
         AppManager.Instance.StartFailRoutine();
-    }
-
-    public void Play()
-    {
-        particles.Play();
+        Destroy(gameObject);
     }
 }
