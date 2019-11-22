@@ -10,10 +10,12 @@ public class CollisionGrid : CustomGrid
     protected List<CollidedPair> collidedPairs = new List<CollidedPair>();
     private CollisionCell[] cells = default;
     private Bounds2 cameraBounds = default;
+    private int circleCollidersCount = default;
 
     public List<CollidedPair> CollidedPairs { get => collidedPairs; }
     public Bounds2 CameraBounds { get => cameraBounds; set => cameraBounds = value; }
     public CollisionCell[] Cells { get => cells; }
+    public int CircleCollidersCount { get => circleCollidersCount; }
 
     public CollisionGrid CreateInstance(CustomCell parentCell, CollisionCell collCellPrefab, float cellSize)
     {
@@ -85,9 +87,11 @@ public class CollisionGrid : CustomGrid
 
     public void UpdateCollisions()
     {
+        circleCollidersCount = 0;
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].UpdateCollisions();
+            circleCollidersCount += cells[i].CircleCollidersCount;
         }
     }
 

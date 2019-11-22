@@ -156,4 +156,14 @@ public class ThreadGrid : CustomGrid
             threadCells[i].Clear();
         }
     }
+
+    public int GetCircleCollidersCount()
+    {
+        int count = 0;
+        for (int i = 0; i < threadCells.Length; i++)
+        {
+            count += threadCells[i].CircleCollidersCount;
+        }
+        return count;
+    }
 }

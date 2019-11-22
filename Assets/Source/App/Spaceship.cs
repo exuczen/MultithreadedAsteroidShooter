@@ -67,8 +67,6 @@ public class Spaceship : MonoBehaviour
         rawSpaceship = new RawSpaceship(this, transform.position, transform.eulerAngles, new Bounds2(Vector2.zero, new Vector2(spaceshipMaxDim, spaceshipMaxDim)));
         rawSpaceship.SetCollider(rawCollider = new RawTriangleCollider2D(r[0], r[1], r[2]));
         rawSpaceship.SetGameObject();
-
-        //shootRoutine = StartCoroutine(ShootRoutine());
     }
 
     public void UpdateSpaceship()
@@ -121,22 +119,6 @@ public class Spaceship : MonoBehaviour
         AppManager.ThreadGrid.AddBodyToThreadCell(rawMissile);
     }
 
-    //public void StopShootRoutine()
-    //{
-    //    if (shootRoutine != null)
-    //        StopCoroutine(shootRoutine);
-    //    shootRoutine = null;
-    //}
-
-    //private IEnumerator ShootRoutine()
-    //{
-    //    while (gameObject.activeSelf)
-    //    {
-    //        yield return new WaitForSeconds(0.5f);
-    //        Shoot();
-    //    }
-    //}
-
     public GameObject CreateMissileGameObject(RawMissile rawMissile)
     {
         Missile missile = missilePrefab.CreateInstance(missileContainer, rawMissile);
@@ -171,7 +153,6 @@ public class Spaceship : MonoBehaviour
     {
         rawSpaceship.Reset();
         gameObject.SetActive(true);
-        //shootRoutine = StartCoroutine(ShootRoutine());
     }
 
     public void StartExplosion(Vector2 position)
@@ -215,7 +196,6 @@ public class RawSpaceship : RawBody2D
             AppManager.ThreadGrid.AddBodyToThreadCell(this);
         else
         {
-            //spaceship.StopShootRoutine();
             spaceship.StartExplosion(transform.position);
             spaceship.gameObject.SetActive(false);
         }

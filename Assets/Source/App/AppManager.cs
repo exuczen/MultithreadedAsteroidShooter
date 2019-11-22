@@ -63,6 +63,7 @@ public class AppManager : Singleton<AppManager>
             spaceship.UpdateShooting();
             cameraDriver.FollowTarget(spaceship.transform);
             threadGrid.UpdateBounds(spaceship.RawSpaceship.Velocity * Time.deltaTime);
+            debugPanel.DebugText = "Asteroids count: " + threadGrid.GetCircleCollidersCount();
 
             threadGrid.SyncStopRequest();
 

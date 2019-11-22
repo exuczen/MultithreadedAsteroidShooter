@@ -24,6 +24,7 @@ public class CollisionCell : CustomCell
     private Color color = default;
 
     public int BodyCount { get => bodies.Count; }
+    public int CircleCollidersCount { get => circleColliders.Count; }
 
     public CollisionCell CreateInstance(CustomCell parentCell, CollisionGrid grid, Vector2Int cellXY, Color[] colors)
     {
@@ -44,7 +45,6 @@ public class CollisionCell : CustomCell
             int midPX = Math.Max(0, (parentCell.Grid.XYCount.x - 1) >> 1);
             int midPY = Math.Max(0, (parentCell.Grid.XYCount.y - 1) >> 1);
             cell.isMiddle = pCellX == midPX && pCellY == midPY && x == midX && y == midY;
-            //Debug.LogWarning(GetType() + "." + midX + " " + midY + " " + " " + midPX + " " + midPY + " " + x + " " + y + " " + pCellX + " " + pCellY + " " + cell.isMiddle);
         }
         else if (xCount % 2 == 0 && yCount % 2 == 0)
         {
@@ -56,7 +56,6 @@ public class CollisionCell : CustomCell
             (pX == 0 && pY == 1 && x == xCount - 1 && y == 0) ||
             (pX == 1 && pY == 1 && x == 0 && y == 0);
         }
-        //Debug.LogWarning(GetType() + ".isMiddle=" + isMiddle);
         if (cell.isMiddle)
         {
             cell.GetComponent<SpriteRenderer>().color = Color.black;

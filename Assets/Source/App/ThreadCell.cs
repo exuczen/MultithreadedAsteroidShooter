@@ -9,6 +9,7 @@ public class ThreadCell : CustomCell
     private Bounds2 cameraBounds = default;
 
     public Bounds2 CameraBounds { get => cameraBounds; set => cameraBounds = value; }
+    public int CircleCollidersCount { get => thread.CollGrid.CircleCollidersCount; }
 
     public ThreadCell CreateInstance(ThreadGrid threadGrid, Vector2Int cellXY, out EventWaitHandle threadWait)
     {

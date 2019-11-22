@@ -111,9 +111,6 @@ public class AsteroidCreator : MonoBehaviour
         float asteroidColliderRadius = AppManager.DebugSprites ? debugAsteroidColliderRadius : this.asteroidColliderRadius;
         RawCirclesCollision2D.basicDiameterSquared = 4f * asteroidColliderRadius * asteroidColliderRadius;
 
-        debugAsteroidPrefab.gameObject.SetActive(true);
-        asteroidPrefab.gameObject.SetActive(true);
-
         for (int i = 0; i < ASTEROID_POOL_CAPACITY; i++)
         {
             CreateAsteroidGameObject(asteroidPool);
@@ -148,9 +145,6 @@ public class AsteroidCreator : MonoBehaviour
                 rawAsteroids[index].SetGameObject();
             }
         }
-
-        debugAsteroidPrefab.gameObject.SetActive(false);
-        asteroidPrefab.gameObject.SetActive(false);
     }
 
     public void RespawnAsteroid(RawAsteroid asteroid)

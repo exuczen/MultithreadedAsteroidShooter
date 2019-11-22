@@ -17,7 +17,7 @@ public class CellThread : SyncedThread
     private Bounds2 cameraBounds = default;
     private CollisionGrid collGrid = default;
 
-    public CollisionGrid CollGrid { set => collGrid = value; }
+    public CollisionGrid CollGrid { get => collGrid; set => collGrid = value; }
 
     private Vector2 gridSize = default;
     private Vector2 gridBottomLeft = default;
