@@ -6,6 +6,8 @@ using MustHave;
 
 public class CellThread : SyncedThread
 {
+    public const float BODY_RESPAWN_INTERVAL = 1f;
+
     private readonly List<RawBody2D> bodies = new List<RawBody2D>();
     private readonly List<RawBody2D> bodiesOutOfBounds = new List<RawBody2D>();
     private readonly List<RawBody2D> bodiesToRespawn = new List<RawBody2D>();
@@ -17,12 +19,12 @@ public class CellThread : SyncedThread
     private Bounds2 cameraBounds = default;
     private CollisionGrid collGrid = default;
 
-    public CollisionGrid CollGrid { get => collGrid; set => collGrid = value; }
-
     private Vector2 gridSize = default;
     private Vector2 gridBottomLeft = default;
     private Vector2Int gridXYCount = default;
     private bool running = default;
+
+    public CollisionGrid CollGrid { get => collGrid; set => collGrid = value; }
 
     public void UpdateBounds()
     {
@@ -55,7 +57,7 @@ public class CellThread : SyncedThread
         bodiesToRespawn.RemoveRange(0, respawnedBodiesCount);
 
         List<CollidedPair> collidedPairs = collGrid.CollidedPairs;
-        float respawnTime = currTime + Const.BodyRespawnInterval;
+        float respawnTime = currTime + BODY_RESPAWN_INTERVAL;
         for (int i = 0; i < collidedPairs.Count; i++)
         {
             CollidedPair pair = collidedPairs[i];

@@ -97,9 +97,9 @@ public class AppManager : Singleton<AppManager>
         );
     }
 
-    public void AddPlayerPoints(int points)
+    public void AddPlayerPointsForAsteroid()
     {
-        player.AddPoints(points);
+        player.AddPointsForAsteroid();
         mainPanel.ScoreVaule = player.Score.ToString();
     }
 

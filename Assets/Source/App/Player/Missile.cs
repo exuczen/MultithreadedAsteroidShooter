@@ -34,7 +34,7 @@ public class RawMissile : RawBody2D
     protected override void OnDestroyWithCollision(RawBody2D other)
     {
         if (other is RawAsteroid)
-            AppManager.Instance.AddPlayerPoints(Const.PlayerPointsForAsteroid);
+            AppManager.Instance.AddPlayerPointsForAsteroid();
     }
 
     protected override GameObject GetGameObjectInstance(out SpriteRenderer spriteRenderer)

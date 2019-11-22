@@ -2,6 +2,8 @@
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private int pointsForAsteroid = default;
+
     private int score = default;
 
     public int Score { get => score; set => score = value; }
@@ -11,9 +13,9 @@ public class Player : MonoBehaviour
         ResetScore();
     }
 
-    public void AddPoints(int points)
+    public void AddPointsForAsteroid()
     {
-        score += points;
+        score += pointsForAsteroid;
     }
 
     public void ResetScore()
